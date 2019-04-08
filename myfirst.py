@@ -36,3 +36,6 @@ print("What's your name?")	#单引号可以自由使用
 print('''the first line
 the second line
 the third line''')
+
+#在print字符串开始的部分加上r, 怎整个语句不会进行转义字符理解
+print(r'this is a string that would not deal with \n')  #输出: this is a string that would not deal with \n
