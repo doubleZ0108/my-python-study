@@ -39,3 +39,24 @@ the third line''')
 
 #在print字符串开始的部分加上r, 怎整个语句不会进行转义字符理解
 print(r'this is a string that would not deal with \n')  #输出: this is a string that would not deal with \n
+
+
+str='doubleZ'
+print(str[0])
+print(str[1:4])	#截取长度 [start_index:end_index+1]     所以输出的好似1，2，3位的字符
+print(str[-1])	#输出最后一个字符 Z
+
+num=1
+str='3'
+sum=num+int(str)	#将string类型转化为int之后就可正常相加了
+print('sum is ',sum)
+
+
+#列表
+#列表是任意对象的有序集合
+list = ["Python",12,[0,1,2],3,14,True]
+print(list)
+print("The third elem of list is ",list[2])
+
+list.remove(12)	#删除某个元素（不是某个位置
+print(list)
