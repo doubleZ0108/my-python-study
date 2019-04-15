@@ -108,3 +108,12 @@ print(sum)
 list = list([1,'zz',3.14,999])
 for i in list:
 	print(i)
+	
+
+#函数
+def f(x):
+	f = 5*x + 2
+	return f
+	
+y = f(2)
+print(y)
