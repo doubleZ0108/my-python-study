@@ -82,7 +82,29 @@ information ={
 print(information)
 
 information['sex']='boy'	#在字典中增加数据
-
 del information['age']	#删除数据
-
 print(information)
+
+
+
+#语句和函数
+#条件语句
+password = input()
+if password == '12345':
+	print('user login success')
+elif password == '00000':
+	print('administor login success')
+else:
+	print('wrong password')
+	
+	
+#循环
+sum = 0
+for i in range(1,10,1):		#第三个参数为每次的增量， 这里i从1～9
+	sum = sum + i
+print(sum)
+
+#如果是列表或者字典，就不用range函数
+list = list([1,'zz',3.14,999])
+for i in list:
+	print(i)
