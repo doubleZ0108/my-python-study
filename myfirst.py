@@ -60,3 +60,29 @@ print("The third elem of list is ",list[2])
 
 list.remove(12)	#删除某个元素（不是某个位置
 print(list)
+
+
+#元组 tuple
+#元组的元素不能修改
+tuple = ['abc',76,'zz',5.2]
+print(tuple[1:3])
+
+#集合 set
+#无序不重复元素的序列
+age = set([18,19,18,20,21,20])
+# age = {18,19,18,20,21,20}, 如果是空集则必须用set函数创建
+print(age)
+
+#字典
+#无序的key-value对
+information ={
+	'name':'double Z',
+	'age':'18'
+}
+print(information)
+
+information['sex']='boy'	#在字典中增加数据
+
+del information['age']	#删除数据
+
+print(information)
