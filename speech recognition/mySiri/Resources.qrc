@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/QT_DESIGNER_TEST">
+          <file>Resources/icon/siri.gif</file>
+    </qresource>
+</RCC>
