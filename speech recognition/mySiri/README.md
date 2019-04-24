@@ -241,12 +241,6 @@ else:
    os.startfile("https://github.com/doubleZ0108/")
 ```
 
-
-
-
-
-'''
-
 <a name="功能实现截屏显示"></a>  
 
 #### 功能实现截屏展示
@@ -309,6 +303,6 @@ else:
 
 ​	**联系方式**	*email:* doubleZ0108@gmail.com
 
-​						*WeChat:* doubleZ0108
+​	&emsp;&emsp;&emsp;&emsp;&emsp;*WeChat:* doubleZ0108
 
-​						*tel:* 15216805515
+&emsp;&emsp;&emsp;&emsp;&emsp;*&emsp;tel:* 15216805515
