@@ -84,17 +84,17 @@
 &emsp;├─music   
 &emsp;│&emsp;&emsp;CHINA-2.mp3   
 &emsp;│      
-    └─ScreenShot   
-&emsp;&emsp;&emsp;can't-hear-clearly1.png   
-&emsp;&emsp;&emsp;can't-hear-clearly2.png   
-&emsp;&emsp;&emsp;help.png   
-&emsp;&emsp;&emsp;I-guess-you-want-to.png   
-&emsp;&emsp;&emsp;open-notepad.png   
-&emsp;&emsp;&emsp;open-the-calculator.png   
-&emsp;&emsp;&emsp;play-music.png   
-&emsp;&emsp;&emsp;start.png   
-&emsp;&emsp;&emsp;talk-to-double-Z.png   
-&emsp;&emsp;&emsp;wake.png   
+&emsp;└─ScreenShot   
+&emsp;&emsp;&emsp;&emsp;can't-hear-clearly1.png   
+&emsp;&emsp;&emsp;&emsp;can't-hear-clearly2.png   
+&emsp;&emsp;&emsp;&emsp;help.png   
+&emsp;&emsp;&emsp;&emsp;I-guess-you-want-to.png   
+&emsp;&emsp;&emsp;&emsp;open-notepad.png   
+&emsp;&emsp;&emsp;&emsp;open-the-calculator.png   
+&emsp;&emsp;&emsp;&emsp;play-music.png   
+&emsp;&emsp;&emsp;&emsp;start.png   
+&emsp;&emsp;&emsp;&emsp;talk-to-double-Z.png   
+&emsp;&emsp;&emsp;&emsp;wake.png   
 
 <a name="具体功能实现"></a>  
 
