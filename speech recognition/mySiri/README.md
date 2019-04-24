@@ -17,8 +17,8 @@
 * [项目功能截屏展示](#项目功能截屏展示)
   * [打开帮助信息](#打开帮助信息)
   * [让语音助手打开计算器](#让语音助手打开计算器)
-  * [未检测到声音, 输出提示信息](#未检测到声音, 输出提示信息)
-  * [语音指令无匹配, 随机执行4条指令](#语音指令无匹配, 随机执行4条指令)
+  * [未检测到声音,输出提示信息](#未检测到声音,输出提示信息)
+  * [语音指令无匹配,随机执行4条指令](#语音指令无匹配,随机执行4条指令)
   * [播放音乐](#播放音乐)
   * [打开记事本](#打开记事本)
   * [打开计算器](#打开计算器)
@@ -67,33 +67,33 @@
 
 #### 项目结构
 
-│  mySiri.py</b>
-│  mySiriInterface.py</b>
-│  README.md</b>
-│  report.docx</b>
-│  Resources_rc.py</b>
+│  mySiri.py   
+│  mySiriInterface.py   
+│  README.md   
+│  report.docx   
+│  Resources_rc.py   
 │  
-└─Resources</b>
-    │  Resources.qrc</b>
+└─Resources   
+    │  Resources.qrc   
     │  
-    ├─icon</b>
-    │      siri.gif</b>
-    │      siri.png</b>
+    ├─icon   
+    │      siri.gif   
+    │      siri.png   
     │      
-    ├─music</b>
-    │      CHINA-2.mp3</b>
+    ├─music   
+    │      CHINA-2.mp3   
     │      
-    └─ScreenShot</b>
-            can't-hear-clearly1.png</b>
-            can't-hear-clearly2.png</b>
-            help.png</b>
-            I-guess-you-want-to.png</b>
-            open-notepad.png</b>
-            open-the-calculator.png</b>
-            play-music.png</b>
-            start.png</b>
-            talk-to-double-Z.png</b>
-            wake.png</b>
+    └─ScreenShot   
+            can't-hear-clearly1.png   
+            can't-hear-clearly2.png   
+            help.png   
+            I-guess-you-want-to.png   
+            open-notepad.png   
+            open-the-calculator.png   
+            play-music.png   
+            start.png   
+            talk-to-double-Z.png   
+            wake.png   
 
 <a name="具体功能实现"></a>  
 
@@ -262,13 +262,13 @@ else:
 
 ![open-the-calculator.gif](https://upload-images.jianshu.io/upload_images/12014150-7f19d310e3f3c34b.gif?imageMogr2/auto-orient/strip)
 
-<a name="未检测到声音, 输出提示信息"></a>  
+<a name="未检测到声音,输出提示信息"></a>  
 
 ##### 3. 未检测到声音, 输出提示信息
 
 ![can't-hear-clearly1.png](https://upload-images.jianshu.io/upload_images/12014150-2ae193d77906c694.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-<a name="语音指令无匹配, 随机执行4条指令"></a>  
+<a name="语音指令无匹配,随机执行4条指令"></a>  
 
 ##### 4. 语音指令无匹配, 随机执行4条指令
 
