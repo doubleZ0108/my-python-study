@@ -184,7 +184,7 @@ class Ui_MainWindow(object):
         self.label_6_1.setText(_translate("MainWindow", "Talk to double Z"))
         self.label_7.setText(_translate("MainWindow", "\"Hey Kerr\" to wake me!"))
         self.label_8.setText(_translate("MainWindow", "Double Click me to know more!"))
-        self.label_9.setText(_translate("MainWindow", "Sorry, I can\'t here your clearly!"))
+        self.label_9.setText(_translate("MainWindow", "Sorry, I can\'t hear your clearly!"))
         self.label_10.setText(_translate("MainWindow", "Kerr is here!"))
         self.label_11.setText(_translate("MainWindow", "What can I do for you?"))
         self.label_12.setText(_translate("MainWindow", "I guess you want to..."))
