@@ -303,6 +303,6 @@ else:
 
 ​	**联系方式**	*email:* doubleZ0108@gmail.com
 
-​	&emsp;&emsp;&emsp;&emsp;&emsp;*WeChat:* doubleZ0108
+&emsp;&emsp;&emsp;&emsp;*WeChat:* doubleZ0108
 
-&emsp;&emsp;&emsp;&emsp;&emsp;*&emsp;tel:* 15216805515
+&emsp;&emsp;&emsp;&emsp;*tel:* 15216805515
