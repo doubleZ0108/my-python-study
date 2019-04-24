@@ -2,7 +2,7 @@
 
 ###### 简易版语音助手 ---- myKerr
 
-#### 目录
+### 目录
 
 - [modifications](#modifications)  
   - [GUI](#GUI)
@@ -19,7 +19,7 @@
     - [定时器](#定时器)
     - [监听鼠标双击事件](#监听鼠标双击事件)
     - [调用系统接口,执行用户指令](#调用系统接口,执行用户指令)
-- [accuracy of speech recognition](accuracy of speech recognition)
+- [accuracy_of_speech_recognition](accuracy_of_speech_recognition)
   - [环境噪声的影响](#环境噪声的影响)
   - [英语发音不准的影响](#英语发音不准的影响)
 - [improve](#improve)
@@ -30,7 +30,7 @@
 
 <a name="modifications"></a>  
 
-#### modifications
+### modifications
 
 经过一周时间对asr.py/asrInterface.py的结构分析, 此次项目更改了全部的用户界面
 
@@ -42,11 +42,11 @@
 
 <a name="GUI"></a>  
 
-#### GUI
+### GUI
 
 <a name="modifications"></a>  
 
-##### 0. 窗口图标和名称
+#### 0. 窗口图标和名称
 
 - **更改窗口名称:** myKerr
 - **更改窗口图标**
@@ -55,7 +55,7 @@
 
 <a name="主界面(启动界面)"></a>  
 
-##### 1. 主界面(启动界面)
+#### 1. 主界面(启动界面)
 
 - **"Hey Kerr" to wake me!:** 提示用户唤醒语音助手的方式
 - **Double Click to know more!:** 提示用户如何查看帮助信息  *(没有明确说明是双击底部的gif是为了整体界面的简洁和大气)*
@@ -64,7 +64,7 @@
 
 <a name="帮助界面"></a>  
 
-##### 2. 帮助界面
+#### 2. 帮助界面
 
 显示四条帮助信息:
 
@@ -77,7 +77,7 @@
 
 <a name="唤醒界面(指令识别界面)"></a>  
 
-##### 3. 唤醒界面(指令识别界面)
+#### 3. 唤醒界面(指令识别界面)
 
 - **Kerr is here!:** 提醒用户语音助手已经唤醒
 - **What can I do for you?:** 提示用户可以输入语音指令
@@ -86,7 +86,7 @@
 
 <a name="无法读取麦克风声音"></a>  
 
-##### 4. 无法读取麦克风声音
+#### 4. 无法读取麦克风声音
 
 无法无法读取麦克风声音时, 在gif上端放置提示信息 **Sorry, I can't hear you clearly!**
 
@@ -96,7 +96,7 @@
 
 <a name="无匹配指令"></a>  
 
-##### 5. 无匹配指令
+#### 5. 无匹配指令
 
 唤醒之后用户的动作指令无法和4条内设指令匹配, 在gif上端放置提示信息 **I guess you want to...** 并随机执行一条指令
 
@@ -104,11 +104,11 @@
 
 <a name="code"></a>  
 
-#### code
+### code
 
 <a name="界面代码"></a>  
 
-##### 0. 界面代码
+#### 0. 界面代码
 
 - 文字QLabel
 
@@ -154,7 +154,7 @@
 
   <a name="语音识别"></a>  
 
-##### 1. 语音识别
+#### 1. 语音识别
 
 通过麦克风检测用户的语音指令, 当无法检测到声音时自动停止, 并通过recognize_sphinx进行语音识别
 
@@ -172,7 +172,7 @@ command = r.recognize_sphinx(audio)
 
 <a name="指令相似度匹配"></a>  
 
-##### 2. 指令相似度匹配
+#### 2. 指令相似度匹配
 
 通过string_similar进行指令相似度的匹配
 
@@ -220,7 +220,7 @@ if max_value < 0.2:
 
 <a name="定时器"></a>  
 
-##### 3. 定时器
+#### 3. 定时器
 
 - 通过threading.Timer(), start(), cancel(), 使用定时器
 - 每5.1s进行一次唤醒识别
@@ -240,7 +240,7 @@ timer.cancel()
 
 <a name="监听鼠标双击事件"></a>  
 
-##### 4. 监听鼠标双击事件
+#### 4. 监听鼠标双击事件
 
 - 在主页的时候, 用户可以双击底部的gif查看帮助信息
 - 在进入帮助信息页面后, 可以双击同样的位置返回主页
@@ -271,7 +271,7 @@ def mouseDoubleClickEvent(self, event):
 
 <a name="调用系统接口,执行用户指令"></a>  
 
-##### 5. 调用系统接口, 执行用户指令
+#### 5. 调用系统接口, 执行用户指令
 
 - os.startfile()播放音乐
 - os.system()打开记事本
@@ -289,9 +289,9 @@ else:
    os.startfile("https://github.com/doubleZ0108/")
 ```
 
-<a name="accuracy of speech recognition"></a>  
+<a name="accuracy_of_speech_recognition"></a>  
 
-#### accuracy of speech recognition
+### accuracy of speech recognition
 
 recognize_sphinx()接口的语音识别效果~~非常好~~无法形容
 
@@ -311,7 +311,7 @@ recognize_sphinx()接口的语音识别效果~~非常好~~无法形容
 
 <a name="improve"></a>  
 
-#### improve
+### improve
 
 ​		<a name="改善录音文件"></a>  
 
