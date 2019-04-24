@@ -13,7 +13,7 @@
   * [指令相似度匹配](#指令相似度匹配)
   * [定时器](#定时器)
   * [监听鼠标双击事件](#监听鼠标双击事件)
-  * [调用系统接口, 执行用户指令](#调用系统接口, 执行用户指令)
+  * [调用系统接口,执行用户指令](#调用系统接口,执行用户指令)
 * [项目功能截屏展示](#项目功能截屏展示)
   * [打开帮助信息](#打开帮助信息)
   * [让语音助手打开计算器](#让语音助手打开计算器)
@@ -67,33 +67,33 @@
 
 #### 项目结构
 
-│  mySiri.py
-│  mySiriInterface.py
-│  README.md
-│  report.docx
-│  Resources_rc.py
+│  mySiri.py</b>
+│  mySiriInterface.py</b>
+│  README.md</b>
+│  report.docx</b>
+│  Resources_rc.py</b>
 │  
-└─Resources
-    │  Resources.qrc
+└─Resources</b>
+    │  Resources.qrc</b>
     │  
-    ├─icon
-    │      siri.gif
-    │      siri.png
+    ├─icon</b>
+    │      siri.gif</b>
+    │      siri.png</b>
     │      
-    ├─music
-    │      CHINA-2.mp3
+    ├─music</b>
+    │      CHINA-2.mp3</b>
     │      
-    └─ScreenShot
-            can't-hear-clearly1.png
-            can't-hear-clearly2.png
-            help.png
-            I-guess-you-want-to.png
-            open-notepad.png
-            open-the-calculator.png
-            play-music.png
-            start.png
-            talk-to-double-Z.png
-            wake.png
+    └─ScreenShot</b>
+            can't-hear-clearly1.png</b>
+            can't-hear-clearly2.png</b>
+            help.png</b>
+            I-guess-you-want-to.png</b>
+            open-notepad.png</b>
+            open-the-calculator.png</b>
+            play-music.png</b>
+            start.png</b>
+            talk-to-double-Z.png</b>
+            wake.png</b>
 
 <a name="具体功能实现"></a>  
 
@@ -220,7 +220,7 @@ def mouseDoubleClickEvent(self, event):
         print("==============Timer is cancel==============")
 ```
 
-<a name="调用系统接口, 执行用户指令"></a>  
+<a name="调用系统接口,执行用户指令"></a>  
 
 ##### 5. 调用系统接口, 执行用户指令
 
