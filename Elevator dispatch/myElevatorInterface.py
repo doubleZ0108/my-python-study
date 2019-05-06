@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QIcon
 
 
 class Ui_MainWindow(object):
@@ -56,7 +55,7 @@ class Ui_MainWindow(object):
 
 
         # region 电梯楼层数码管
-        lcdNumber_pos = [70, 340, 620, 900, 1180]
+        lcdNumber_pos = [50, 320, 600, 880, 1160]
         self.lcdNumber = []
         for i in range(0, len(lcdNumber_pos)):
             self.lcdNumber.append(QtWidgets.QLCDNumber(self.centralwidget))
@@ -64,6 +63,16 @@ class Ui_MainWindow(object):
             self.lcdNumber[i].setDigitCount(2)
             self.lcdNumber[i].setProperty("value", 1.0)
             self.lcdNumber[i].setObjectName("lcdNumber" + str(i))
+        # endregion
+
+        # region 电梯上下行标志
+        stateshow_pos = [95, 365, 645, 925, 1205]
+        self.stateshow = []
+        for i in range(0, len(stateshow_pos)):
+            self.stateshow.append(QtWidgets.QGraphicsView(self.centralwidget))
+            self.stateshow[i].setGeometry(QtCore.QRect(stateshow_pos[i], 410, 71, 61))
+            self.stateshow[i].setStyleSheet("QGraphicsView{border-image: url(Resources/Button/state.png)}")
+            self.stateshow[i].setObjectName("stateshow"+str(i))
         # endregion
 
 
@@ -173,8 +182,6 @@ class Ui_MainWindow(object):
             self.closebtn[i].setText(_translate("MainWindow", "关"))
 
 
-
-
     def warningClick(self):
         which_warnbtn = self.sender().objectName()[-1]
         print(which_warnbtn)
@@ -196,4 +203,3 @@ class Ui_MainWindow(object):
         which_floor = self.comboBox.currentText()
         which_btn = self.sender().objectName()
         print("用户选择了" + str(which_floor) + which_btn)
-
