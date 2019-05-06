@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from dispatch import Controler
 
 
 class Ui_MainWindow(object):
+    def __init__(self):
+        self.Ctrl = Controler(self)
+        self.elevEnabled = [True, True, True, True, True]   #电梯状态标志位
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1400, 700)
@@ -64,6 +69,7 @@ class Ui_MainWindow(object):
             self.lcdNumber[i].setProperty("value", 1.0)
             self.lcdNumber[i].setObjectName("lcdNumber" + str(i))
         # endregion
+
 
         # region 电梯上下行标志
         stateshow_pos = [95, 365, 645, 925, 1205]
@@ -129,6 +135,7 @@ class Ui_MainWindow(object):
             self.closebtn[i].setObjectName("closebtn"+str(i))
         # endregion
 
+
         # region 下拉框模型
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setGeometry(QtCore.QRect(630, 55, 111, 31))
@@ -186,10 +193,11 @@ class Ui_MainWindow(object):
         which_warnbtn = self.sender().objectName()[-1]
         print(which_warnbtn)
         self.warnbtn[int(which_warnbtn)].setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.MessBox = QtWidgets.QMessageBox.information(self.warnbtn[int(which_warnbtn)], "警告", "第"+which_warnbtn+"号电梯已坏, 不能继续使用")
+        self.MessBox = QtWidgets.QMessageBox.information(self.warnbtn[int(which_warnbtn)], "警告", "第"+which_warnbtn+"号电梯已损坏, 不能继续使用")
         self.warnbtn[int(which_warnbtn)].setStyleSheet("background-color: rgb(180, 0, 0);")
 
-        # self.warnbtn[0].setEnabled(False)   #设置按钮不可用
+        self.Ctrl.warnCtrl(which_warnbtn)
+
 
     def btnClick(self):
         whichbtn = self.sender()
