@@ -10,7 +10,7 @@ class mywindow(QtWidgets.QMainWindow,Ui_MainWindow):
         super(mywindow,self).__init__()
         self.setupUi(self)
         self.setWindowTitle('myElevator')
-        self.setWindowIcon(QIcon('Resources/icon/icon.png'))
+        self.setWindowIcon(QIcon('Resources/Icon/icon.png'))
 
 
 
