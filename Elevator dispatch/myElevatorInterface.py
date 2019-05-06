@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 
+# Form implementation generated from reading ui file 'myElevatorInterface.ui'
+#
+# Created by: PyQt5 UI code generator 5.12.1
+#
+# WARNING! All changes made in this file will be lost!
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -11,7 +17,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        #墙模型
+        # 墙模型
         wall_pos = [10, 280, 560, 840, 1120, 1380]
         self.wall = []
         for i in range(0, len(wall_pos)):
@@ -72,7 +78,52 @@ class Ui_MainWindow(object):
 
         #绑定点击事件
         for i in range(0, len(self.warnbtn)):
-            self.warnbtn[i].clicked.connect(MainWindow.warningCllick)
+            self.warnbtn[i].clicked.connect(MainWindow.warningClick)
+
+
+
+        # self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        # self.pushButton_2.setGeometry(QtCore.QRect(180, 580, 31, 31))
+        # self.pushButton_2.setObjectName("pushButton_2")
+        # self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
+        # self.pushButton_3.setGeometry(QtCore.QRect(230, 580, 31, 31))
+        # self.pushButton_3.setObjectName("pushButton_3")
+
+        #楼层按键建模
+        gridLayoutWidget_pos = [180, 450, 730, 1010, 1290]
+        self.gridLayoutWidget = []
+        self.gridLayout = []
+        for i in range(0, len(gridLayoutWidget_pos)):
+            self.gridLayoutWidget.append(QtWidgets.QWidget(self.centralwidget))
+            self.gridLayoutWidget[i].setGeometry(QtCore.QRect(gridLayoutWidget_pos[i], 120, 81, 451))
+            self.gridLayoutWidget[i].setObjectName("gridLayoutWidget" + str(i))
+            self.gridLayout.append(QtWidgets.QGridLayout(self.gridLayoutWidget[i]))
+            self.gridLayout[i].setContentsMargins(0, 0, 0, 0)
+            self.gridLayout[i].setObjectName("gridLayout" + str(i))
+
+        names = [
+            '19', '20',
+            '17', '18',
+            '15', '16',
+            '13', '14',
+            '11', '12',
+            '9', '10',
+            '7', '8',
+            '5', '6',
+            '3', '4',
+            '1', '2'
+        ]
+
+        positions = [(i, j) for i in range(10) for j in range(2)]  # 构造五行四列的格子
+        for i in range(0,len(gridLayoutWidget_pos)):
+            for position, name in zip(positions, names):
+                button = QtWidgets.QPushButton(name)
+                button.setObjectName("button_"+str(i)+'_'+name)
+                button.clicked.connect(MainWindow.btnClick)
+                self.gridLayout[i].addWidget(button, *position)  # 放到布局里
+
+
+
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -97,13 +148,17 @@ class Ui_MainWindow(object):
 
 
 
-    def warningCllick(self):
-        buf = self.sender()
-
-        print(buf.text())
-        # QtWidgets.QMessageBox.information(self.pushButton, "警告", "第i个电梯已坏, 不能继续使用")
-
-        now = self.lcdNumber[0].value()
-        self.lcdNumber[0].setProperty("value", now+1)
+    def warningClick(self):
+        which_warnbtn = self.sender().objectName()[-1]
+        print(which_warnbtn)
+        QtWidgets.QMessageBox.information(self.warnbtn[int(which_warnbtn)], "警告", "第"+which_warnbtn+"号电梯已坏, 不能继续使用")
 
         # self.warnbtn[0].setEnabled(False)   #设置按钮不可用
+
+    def btnClick(self):
+        whichbtn = self.sender()
+
+        btn_name = whichbtn.objectName()
+        print(btn_name)
+
+        whichbtn.setStyleSheet("background-color: rgb(100, 0, 0);")
