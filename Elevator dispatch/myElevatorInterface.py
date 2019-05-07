@@ -50,7 +50,7 @@ class Ui_MainWindow(object):
             self.elevator_front[2 * i].setStyleSheet("background-color: rgb(160, 160, 160);")
             self.elevator_front[2 * i].setObjectName("elevator_front" + str(2 * i))
             self.elevator_Anim.append(QPropertyAnimation(self.elevator_front[2 * i], b"geometry"))
-            self.elevator_Anim[2 * i].setDuration(3000)  # 设定动画时间
+            self.elevator_Anim[2 * i].setDuration(2000)  # 设定动画时间
             self.elevator_Anim[2 * i].setStartValue(QtCore.QRect(elevator_pos[i], 470, 64, 161))  # 设置起始大小
             self.elevator_Anim[2 * i].setEndValue(QtCore.QRect(elevator_pos[i], 470, 8, 161))  # 设置终止大小
 
@@ -59,7 +59,7 @@ class Ui_MainWindow(object):
             self.elevator_front[2 * i + 1].setStyleSheet("background-color: rgb(160, 160, 160);")
             self.elevator_front[2 * i + 1].setObjectName("elevator_front" + str(2 * i + 1))
             self.elevator_Anim.append(QPropertyAnimation(self.elevator_front[2 * i + 1], b"geometry"))
-            self.elevator_Anim[2 * i + 1].setDuration(3000)
+            self.elevator_Anim[2 * i + 1].setDuration(2000)
             self.elevator_Anim[2 * i + 1].setStartValue(QtCore.QRect(elevator_pos[i] + 67, 470, 64, 161))
             self.elevator_Anim[2 * i + 1].setEndValue(QtCore.QRect(elevator_pos[i] + 123, 470, 8, 161))
         # endregion
@@ -170,12 +170,15 @@ class Ui_MainWindow(object):
         self.chooselabel.setGeometry(QtCore.QRect(450, 60, 161, 21))
         self.chooselabel.setObjectName("chooselabel")
 
+        #上行按钮
         self.upbtn = QtWidgets.QPushButton(self.centralwidget)
         self.upbtn.setGeometry(QtCore.QRect(760, 40, 51, 51))
         self.upbtn.setStyleSheet("QPushButton{border-image: url(Resources/Button/up.png)}"
                                  "QPushButton:hover{border-image: url(Resources/Button/up_hover.png)}"
                                  "QPushButton:pressed{border-image: url(Resources/Button/up_pressed.png)}")
         self.upbtn.setObjectName("upbtn")
+
+        # 上行按钮
         self.downbtn = QtWidgets.QPushButton(self.centralwidget)
         self.downbtn.setGeometry(QtCore.QRect(810, 40, 51, 51))
         self.downbtn.setStyleSheet("QPushButton{border-image: url(Resources/Button/down.png)}"
@@ -185,6 +188,23 @@ class Ui_MainWindow(object):
 
         self.upbtn.clicked.connect(MainWindow.chooseClick)
         self.downbtn.clicked.connect(MainWindow.chooseClick)
+        # endregion
+
+
+        # region 小人模型
+        figure_pos = [30, 300, 580, 860, 1140]
+        self.figure = []
+        self.figure_Anim = []
+        for i in range(0, len(figure_pos)):
+            self.figure.append(QtWidgets.QGraphicsView(self.centralwidget))
+            self.figure[i].setGeometry(QtCore.QRect(figure_pos[i]-20, 590, 71, 71))
+            self.figure[i].setStyleSheet("QGraphicsView{border-image: url(Resources/Figure/people.png)}")
+            self.figure[i].setVisible(False)
+            self.figure[i].setObjectName("figure" + str(i))
+            self.figure_Anim.append(QPropertyAnimation(self.figure[i], b"geometry"))
+            self.figure_Anim[i].setDuration(3000)
+            self.figure_Anim[i].setStartValue(QtCore.QRect(figure_pos[i]-20, 590, 71, 71))
+            self.figure_Anim[i].setEndValue(QtCore.QRect(figure_pos[i]+10, 510, 111, 121))
         # endregion
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -212,7 +232,7 @@ class Ui_MainWindow(object):
             self.closebtn[i].setText(_translate("MainWindow", "关"))
 
     def warningClick(self):
-        which_warnbtn = self.sender().objectName()[-1]
+        which_warnbtn = int(self.sender().objectName()[-1])
         print("点击了{0}号报警器".format(which_warnbtn))
         self.warnbtn[int(which_warnbtn)].setStyleSheet("background-color: rgb(255, 255, 255);")
         self.MessBox = QtWidgets.QMessageBox.information(self.warnbtn[int(which_warnbtn)], "警告",  # 弹出警告框
