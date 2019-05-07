@@ -1,8 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
+import time
 from myElevatorInterface import *
 import numpy as np
-import time
+import time, threading, sched
 
 OPEN = 0
 CLOSED = 1
@@ -13,8 +14,6 @@ class Controler(object):
         self.elev = Elev
 
     def warnCtrl(self, whichelev):
-        whichelev = int(whichelev)
-
         self.elev.elevEnabled[whichelev] = False  # 该电梯禁用
 
         self.elev.warnbtn[whichelev].setEnabled(False)  # 报警键禁用
@@ -45,14 +44,53 @@ class Controler(object):
         if whichcommand == 0:  # 如果用户要开门
             if self.elev.elevState[whichelev] == CLOSED:  # 如果当前门是关闭状态
                 self.elev.elevState[whichelev] = OPEN  # 先将门状态更新为打开
-                self.elev.elevator_Anim[2 * whichelev].setDirection(QAbstractAnimation.Forward)  # 正向设定动画
-                self.elev.elevator_Anim[2 * whichelev + 1].setDirection(QAbstractAnimation.Forward)
-                self.elev.elevator_Anim[2 * whichelev].start()  # 开始播放
-                self.elev.elevator_Anim[2 * whichelev + 1].start()
+
+                self.openDoor_Anim(whichelev)
+                self.figureIn(whichelev)
+
         else:  # 如果用户要关门
             if self.elev.elevState[whichelev] == OPEN:  # 如果当前门是打开状态
                 self.elev.elevState[whichelev] = CLOSED  # 先将门状态更新为关闭
-                self.elev.elevator_Anim[2 * whichelev].setDirection(QAbstractAnimation.Backward)  # 反向设定动画
-                self.elev.elevator_Anim[2 * whichelev + 1].setDirection(QAbstractAnimation.Backward)
-                self.elev.elevator_Anim[2 * whichelev].start()  # 开始播放
-                self.elev.elevator_Anim[2 * whichelev + 1].start()
+
+                self.closeDoor_Anim(whichelev)
+
+    # 开门动画播放(不做检测
+    def openDoor_Anim(self, whichelev):
+        self.elev.elevator_Anim[2 * whichelev].setDirection(QAbstractAnimation.Forward)  # 正向设定动画
+        self.elev.elevator_Anim[2 * whichelev + 1].setDirection(QAbstractAnimation.Forward)
+        self.elev.elevator_Anim[2 * whichelev].start()  # 开始播放
+        self.elev.elevator_Anim[2 * whichelev + 1].start()
+
+    # 关门动画播放(不做检测
+    def closeDoor_Anim(self, whichelev):
+        self.elev.elevator_Anim[2 * whichelev].setDirection(QAbstractAnimation.Backward)  # 反向设定动画
+        self.elev.elevator_Anim[2 * whichelev + 1].setDirection(QAbstractAnimation.Backward)
+        self.elev.elevator_Anim[2 * whichelev].start()  # 开始播放
+        self.elev.elevator_Anim[2 * whichelev + 1].start()
+
+    # 小人进电梯
+    def figureIn(self, whichelev):
+        self.elev.figure[whichelev].setVisible(True)
+        self.elev.figure_Anim[whichelev].setDirection(QAbstractAnimation.Forward)
+        self.elev.figure_Anim[whichelev].start()
+
+        s = threading.Timer(1.5, self.setDoorTop, (whichelev,))  # 1.5秒之后把门至于顶层
+        s.start()
+
+    # 小人出电梯
+    def figureOut(self, whichelev):
+        self.elev.figure[whichelev].setVisible(True)
+        self.elev.figure_Anim[whichelev].setDirection(QAbstractAnimation.Backward)
+        self.elev.figure_Anim[whichelev].start()
+
+        s = threading.Timer(0, self.setFigureTop, (whichelev,))  # 将人至于顶层
+        s.start()
+
+    # 将门至于顶层
+    def setDoorTop(self, whichelev):
+        self.elev.elevator_front[2 * whichelev].raise_()
+        self.elev.elevator_front[2 * whichelev + 1].raise_()
+
+    # 将小人至于顶层
+    def setFigureTop(self, whichelev):
+        self.elev.figure[whichelev].raise_()
