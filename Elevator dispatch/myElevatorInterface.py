@@ -4,15 +4,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from dispatch import Controler
 from PyQt5.QtCore import *
 
-OPEN = 0
-CLOSED = 1
+OPEN = 0        #开门装填
+CLOSED = 1      #关门状态
+RUNNING_UP = 2     #运行(向上)状态
+RUNNING_DOWN = 3    #运行(向下)状态
 
 
 class Ui_MainWindow(object):
     def __init__(self):
         self.Ctrl = Controler(self)
         self.elevEnabled = [True] * 5  # 电梯状态(可使用/禁用)标志位
-        self.elevState = [CLOSED] * 5  # 电梯状态(开门/关门)标志位
+        self.elevState = [CLOSED] * 5  # 电梯状态(开门/关门/运行向上/运行向下)标志位
+        self.elevNow = [1] * 5      #电梯楼层
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -137,7 +140,7 @@ class Ui_MainWindow(object):
         for i in range(0, len(gridLayoutWidget_pos)):
             for position, name in zip(positions, names):
                 button = QtWidgets.QPushButton(name)
-                button.setObjectName("button_" + str(i) + '_' + name)
+                button.setObjectName("button " + str(i) + ' ' + name)
                 button.clicked.connect(MainWindow.btnClick)
                 self.gridLayout[i].addWidget(button, *position)  # 放到布局里
         # endregion
@@ -170,7 +173,7 @@ class Ui_MainWindow(object):
         self.chooselabel.setGeometry(QtCore.QRect(450, 60, 161, 21))
         self.chooselabel.setObjectName("chooselabel")
 
-        #上行按钮
+        # 上行按钮
         self.upbtn = QtWidgets.QPushButton(self.centralwidget)
         self.upbtn.setGeometry(QtCore.QRect(760, 40, 51, 51))
         self.upbtn.setStyleSheet("QPushButton{border-image: url(Resources/Button/up.png)}"
@@ -190,21 +193,20 @@ class Ui_MainWindow(object):
         self.downbtn.clicked.connect(MainWindow.chooseClick)
         # endregion
 
-
         # region 小人模型
         figure_pos = [30, 300, 580, 860, 1140]
         self.figure = []
         self.figure_Anim = []
         for i in range(0, len(figure_pos)):
             self.figure.append(QtWidgets.QGraphicsView(self.centralwidget))
-            self.figure[i].setGeometry(QtCore.QRect(figure_pos[i]-20, 590, 71, 71))
+            self.figure[i].setGeometry(QtCore.QRect(figure_pos[i] - 20, 590, 71, 71))
             self.figure[i].setStyleSheet("QGraphicsView{border-image: url(Resources/Figure/people.png)}")
             self.figure[i].setVisible(False)
             self.figure[i].setObjectName("figure" + str(i))
             self.figure_Anim.append(QPropertyAnimation(self.figure[i], b"geometry"))
             self.figure_Anim[i].setDuration(3000)
-            self.figure_Anim[i].setStartValue(QtCore.QRect(figure_pos[i]-20, 590, 71, 71))
-            self.figure_Anim[i].setEndValue(QtCore.QRect(figure_pos[i]+10, 510, 111, 121))
+            self.figure_Anim[i].setStartValue(QtCore.QRect(figure_pos[i] - 20, 590, 71, 71))
+            self.figure_Anim[i].setEndValue(QtCore.QRect(figure_pos[i] + 10, 510, 111, 121))
         # endregion
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -245,9 +247,14 @@ class Ui_MainWindow(object):
         whichbtn = self.sender()
 
         btn_name = whichbtn.objectName()
-        print(btn_name)
+        buf = [int(s) for s in btn_name.split() if s.isdigit()]     #提取字符串中的数字
+        whichelev = buf[0]
+        whichfloor = buf[1]
+        print("{0}号电梯, {1}按键被按".format(whichelev, whichfloor))
 
         whichbtn.setStyleSheet("background-color: rgb(100, 0, 0);")
+
+        self.Ctrl.elevMove(whichelev, self.elevNow[whichelev], whichfloor)
 
     def chooseClick(self):
         which_floor = self.comboBox.currentText()
