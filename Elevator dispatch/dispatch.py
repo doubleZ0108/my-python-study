@@ -2,25 +2,43 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 import time, threading
 import collections
+from PyQt5.QtCore import QTimer
+
+import random
+
+
+def randomcolor():
+    colorArr = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+    color = ""
+    for i in range(6):
+        color += colorArr[random.randint(0, 14)]
+    return "#" + color
+
 
 from myElevatorInterface import *
 import numpy as np
 import time, threading, sched
 import queue
 
-OPEN = 0
-CLOSED = 1
+OPEN = 0  # 开门装填
+CLOSED = 1  # 关门状态
+RUNNING_UP = 2  # 运行(向上)状态
+RUNNING_DOWN = 3  # 运行(向下)状态
 
 
 class Controler(object):
     def __init__(self, Elev):
         self.elev = Elev
 
-        update = threading.Timer(0.1, self.updateElevState)  # 第一次执行是0s之后
-        update.start()
+        # update = threading.Timer(0.1, self.updateElevState)  # 第一次执行是0s之后
+        # update.start()
+        self.timer = QTimer()  # 初始化一个定时器
+        self.timer.timeout.connect(self.updateElevState)  # 计时结束调用updateElevState()方法
+        self.timer.start(1000)  # 设置计时间隔并启动
 
-        self.messQueue = [queue.Queue()]*5   # 5个电梯内部消息队列
-
+        self.messQueue = []  # 5个电梯内部消息队列
+        for i in range(0, 5):
+            self.messQueue.append(queue.Queue())
 
     # 警报器槽函数
     def warnCtrl(self, whichelev):
@@ -93,7 +111,7 @@ class Controler(object):
         self.elev.figure_Anim[whichelev].setDirection(QAbstractAnimation.Backward)
         self.elev.figure_Anim[whichelev].start()
 
-        s = threading.Timer(0, self.setFigureTop, (whichelev,))  # 将人至于顶层
+        s = threading.Timer(3, self.setFigureTop, (whichelev,))  # 将人至于顶层
         s.start()
 
     # 将门至于顶层
@@ -104,33 +122,91 @@ class Controler(object):
     # 将小人至于顶层
     def setFigureTop(self, whichelev):
         self.elev.figure[whichelev].raise_()
+        self.elev.figure[whichelev].setVisible(False)
+
+    #小人进电梯压消息队列
+    def openDoor_MessQueue(self, whichelev):
+        self.messQueue[whichelev].put("open_the_door_in")
+        self.messQueue[whichelev].put("wait")
+        self.messQueue[whichelev].put("wait")
+        self.messQueue[whichelev].put("close_the_door")
+        self.messQueue[whichelev].put("wait")
+        self.messQueue[whichelev].put("wait")
+
+    #小人出电梯压消息队列
+    def closeDoor_MessQueue(self, whichelev):
+        self.messQueue[whichelev].put("open_the_door_out")
+        self.messQueue[whichelev].put("wait")
+        self.messQueue[whichelev].put("wait")
+        self.messQueue[whichelev].put("close_the_door")
+        self.messQueue[whichelev].put("wait")
+        self.messQueue[whichelev].put("wait")
 
     # 电梯运动
     def elevMove(self, whichelev, source, dest):
 
         if source < dest:
+            self.openDoor_MessQueue(whichelev)
+            self.messQueue[whichelev].put("start_go_up")
             for i in range(source + 1, dest + 1, 1):
                 self.elev.elevNow[whichelev] = i
-                self.messQueue[whichelev].put([whichelev, i])
+                self.messQueue[whichelev].put(i)
+            self.messQueue[whichelev].put("end_go_up")
+            self.closeDoor_MessQueue(whichelev)
 
         elif source > dest:
+            self.messQueue[whichelev].put("start_go_down")
             for i in range(source, dest - 1, -1):
                 self.elev.elevNow[whichelev] = i
                 self.messQueue[whichelev].put((whichelev, i))
+            self.messQueue[whichelev].put("end_go_down")
+
+        else:  # 如果选中的楼层和当前相同 => 打开电梯门
+            self.openDoor_MessQueue(whichelev)
+            self.closeDoor_MessQueue(whichelev)
 
     # 更新电梯状态
     def updateElevState(self):
-        print('timer clock......')
+        # print('timer clock......')
 
-        global update
-        # 必须在定时器执行函数内部重复构造定时器
-        update = threading.Timer(1, self.updateElevState)  # 之后是2s执行一次
-        update.start()
+        # global update
+        # # 必须在定时器执行函数内部重复构造定时器
+        # update = threading.Timer(10, self.updateElevState)  # 之后是2s执行一次
+        # update.start()
 
         try:
-            for i in range(0, 5):
-                [whichelev, nowFloor] = self.messQueue[i].get()
-                print(whichelev, nowFloor)
-                self.elev.lcdNumber[whichelev].setProperty("value", nowFloor)
+            for i in range(0, len(self.messQueue)):
+                if not self.messQueue[i].empty():
+                    command = self.messQueue[i].get()
+
+                    if command == "open_the_door_in":
+                        self.elev.elevState[i] = OPEN
+                        self.openDoor_Anim(i)
+                        self.figureIn_Anim(i)
+                    elif command == "open_the_door_out":
+                        self.elev.elevState[i] = OPEN
+                        self.openDoor_Anim(i)
+                        self.figureOut_Anim(i)
+                    elif command == "close_the_door":
+                        self.elev.elevState[i] = CLOSED
+                        self.closeDoor_Anim(i)
+                    elif command == "start_go_up":
+                        self.elev.elevState[i] = RUNNING_UP
+                        self.elev.stateshow[i].setStyleSheet(
+                            "QGraphicsView{border-image: url(Resources/Button/state_up.png)}")
+                    elif command == "end_go_up":
+                        self.elev.elevState[i] = CLOSED
+                        self.elev.stateshow[i].setStyleSheet("QGraphicsView{border-image: url(Resources/Button/state.png)}")
+
+                        button = self.elev.findChild(QtWidgets.QPushButton, "button {0} {1}".format(i, self.elev.elevNow[i]))
+                        button.setStyleSheet("")
+
+                    elif command == "wait":
+                        continue
+                    else:
+                        nowFloor = int(command)
+                        print(nowFloor)
+                        self.elev.lcdNumber[i].setProperty("value", nowFloor)
+
         except:
             print("消息队列为空...")
