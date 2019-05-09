@@ -6,18 +6,17 @@ from PyQt5.QtCore import QTimer
 
 from myElevatorInterface import *
 import numpy as np
-import time, threading, sched
-import queue
+import time, threading
 
 OPEN = 0  # 开门装填
 CLOSED = 1  # 关门状态
 
-RUNNING = 2
-# RUNNING_UP = 2  # 运行(向上)状态
-# RUNNING_DOWN = 3  # 运行(向下)状态
-STANDSTILL = 4  # 静止状态
-READYSTART = 5  # 电梯即将运动
-READYSTOP = 6
+STANDSTILL = 0  # 静止状态
+RUNNING = 1     #运行状态
+RUNNING_UP = 2
+RUNNING_DOWN = 3
+READYSTART = 4  # 电梯即将运动
+READYSTOP = 5   #电梯即将停止
 
 class Controler(object):
     def __init__(self, Elev):
@@ -30,6 +29,9 @@ class Controler(object):
         self.messQueue = []  # 5个电梯内部消息列表(用列表代替队列)
         for i in range(0, 5):
             self.messQueue.append([])
+        self.messQueue_reverse = []  # 5个电梯内部不顺路消息列表(用列表代替队列)
+        for i in range(0, 5):
+            self.messQueue_reverse.append([])
 
     # 警报器槽函数
     def warnCtrl(self, whichelev):
@@ -62,15 +64,13 @@ class Controler(object):
     # 开关门槽函数
     def doorCtrl(self, whichelev, whichcommand):
         if whichcommand == 0:  # 如果用户要开门
-            if self.elev.doorState[whichelev] == CLOSED and self.elev.elevState[
-                whichelev] == STANDSTILL:  # 如果当前门是关闭状态并且电梯是静止的
+            if self.elev.doorState[whichelev] == CLOSED and self.elev.elevState[whichelev] == STANDSTILL:  # 如果当前门是关闭状态并且电梯是静止的
                 self.elev.doorState[whichelev] = OPEN  # 先将门状态更新为打开
 
                 self.openDoor_Anim(whichelev)
 
         else:  # 如果用户要关门
-            if self.elev.doorState[whichelev] == OPEN and self.elev.elevState[
-                whichelev] == STANDSTILL:  # 如果当前门是打开状态并且电梯是静止的
+            if self.elev.doorState[whichelev] == OPEN and self.elev.elevState[whichelev] == STANDSTILL:  # 如果当前门是打开状态并且电梯是静止的
                 self.elev.doorState[whichelev] = CLOSED  # 先将门状态更新为关闭
 
                 self.closeDoor_Anim(whichelev)
@@ -119,13 +119,28 @@ class Controler(object):
 
     # 电梯运动
     def elevMove(self, whichelev, dest):
-        nowFloor = self.elev.elevNow[whichelev]
-        if nowFloor < dest:
+        nowFloor = self.elev.elevNow[whichelev]     #获取当前电梯位置
+        if nowFloor < dest:             #如果按键大于当前楼层
             if self.elev.elevState[whichelev] == STANDSTILL:
                 self.messQueue[whichelev].append(dest)
             else:
-                self.messQueue[whichelev].append(dest)
+                self.messQueue[whichelev].append(dest)      ####这里要检测顺路
                 self.messQueue[whichelev].sort()
+        elif nowFloor > dest:
+            if self.elev.elevState[whichelev] == STANDSTILL:
+                self.messQueue[whichelev].append(dest)
+            else:
+                self.messQueue[whichelev].append(dest)  ####这里要检测顺路
+                self.messQueue[whichelev].sort()
+                self.messQueue[whichelev].reverse()
+        else:                           #如果按键就为当前楼层
+            if self.elev.elevState[whichelev] == STANDSTILL:     #电梯静止 => 打开门(并等待用户自行关闭)
+                self.elev.doorState[whichelev]=OPEN
+                self.openDoor_Anim(whichelev)
+
+            button = self.elev.findChild(QtWidgets.QPushButton,"button {0} {1}".format(whichelev, nowFloor))
+            button.setStyleSheet("")
+            button.setEnabled(True)
 
 
         print(self.messQueue[whichelev])
@@ -137,7 +152,9 @@ class Controler(object):
 
         for i in range(0, len(self.messQueue)):
             if len(self.messQueue[i]):                      #某个电梯的消息队列不为空
-                if self.elev.elevState[i]==STANDSTILL:      #电梯处于静止状态
+                if self.elev.doorState[i]==OPEN:        #如果电梯门是打开的 => 等待电梯关门
+                    continue
+                elif self.elev.elevState[i]==STANDSTILL:      #电梯处于静止状态
                     self.openDoor_Anim(i)
                     self.figureIn_Anim(i)
                     self.elev.elevState[i] = READYSTART     #变为就绪运行状态
@@ -148,14 +165,18 @@ class Controler(object):
                     self.messQueue[i].pop(0)
                     self.closeDoor_Anim(i)
                     self.elev.elevState[i]=STANDSTILL       #变为静止状态
+                    self.elev.stateshow[i].setStyleSheet("QGraphicsView{border-image: url(Resources/Button/state.png)}")
                 else:
                     destFloor = self.messQueue[i][0]
                     if self.elev.elevNow[i] < destFloor:
-                        self.elev.stateshow[i].setStyleSheet(
-                                    "QGraphicsView{border-image: url(Resources/Button/state_up.png)}")
+                        self.elev.stateshow[i].setStyleSheet("QGraphicsView{border-image: url(Resources/Button/state_up.png)}")
                         self.elev.elevNow[i] = self.elev.elevNow[i] + 1
                         self.elev.lcdNumber[i].setProperty("value", self.elev.elevNow[i])
-                    elif self.elev.elevNow[i] == destFloor:
+                    elif self.elev.elevNow[i] > destFloor:
+                        self.elev.stateshow[i].setStyleSheet("QGraphicsView{border-image: url(Resources/Button/state_down.png)}")
+                        self.elev.elevNow[i] = self.elev.elevNow[i] - 1
+                        self.elev.lcdNumber[i].setProperty("value", self.elev.elevNow[i])
+                    else:
                         self.openDoor_Anim(i)
                         self.figureOut_Anim(i)
                         self.elev.elevState[i]=READYSTOP     #到达目的地变为就绪停止状态
