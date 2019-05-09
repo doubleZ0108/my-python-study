@@ -164,7 +164,38 @@ class Controler(object):
 
         # print(self.messQueue[whichelev])
 
-  
+    # 外命令电梯调度
+    def chooseCtrl(self, whichfloor, choice):
+
+        # region 初步筛选没损坏的电梯
+        EnabledList = []
+        for i in range(0, 5):
+            if self.elev.elevEnabled[i]:
+                EnabledList.append(i)
+        print(EnabledList)
+        # endregion
+
+        dist = [INFINITE]*5  # 可使用电梯距离用户的距离
+
+        for EnabledElev in EnabledList:
+            if self.elev.elevState[EnabledElev]==RUNNING_UP and choice == GOUP and whichfloor > self.elev.elevNow[EnabledElev]:
+                dist[EnabledElev] = whichfloor - self.elev.elevNow[EnabledElev]
+            elif self.elev.elevState[EnabledElev]==RUNNING_DOWN and choice==GODOWN and whichfloor < self.elev.elevNow[EnabledElev]:
+                dist[EnabledElev] = self.elev.elevNow[EnabledElev] - whichfloor
+            elif self.elev.elevState[EnabledElev]==STANDSTILL:
+                dist[EnabledElev] = abs(self.elev.elevNow[EnabledElev]-whichfloor)
+
+        BestElev = dist.index(min(dist))
+        #用户选择的就在当层会有bug
+        if dist[BestElev]==0:
+            self.elev.doorState[BestElev]=OPEN
+            self.openDoor_Anim(BestElev)
+            self.elev.elevEnabled[BestElev] = False
+        else:
+            self.messQueue[BestElev].append(whichfloor)
+            button = self.elev.findChild(QtWidgets.QPushButton,"button {0} {1}".format(BestElev, whichfloor))
+            button.setStyleSheet("background-color: rgb(11, 15, 255);")
+            button.setEnabled(False)
 
     # 更新电梯状态
     def updateElevState(self):
