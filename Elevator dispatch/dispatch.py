@@ -8,15 +8,22 @@ from myElevatorInterface import *
 import numpy as np
 import time, threading
 
+INFINITE = 100              #定义"无穷大量"
+
 OPEN = 0  # 开门装填
 CLOSED = 1  # 关门状态
 
 STANDSTILL = 0  # 静止状态
-RUNNING = 1     #运行状态
-RUNNING_UP = 2
-RUNNING_DOWN = 3
-READYSTART = 4  # 电梯即将运动
-READYSTOP = 5   #电梯即将停止
+RUNNING_UP = 1  # 电梯上行状态
+RUNNING_DOWN = 2  # 电梯下行状态
+
+NOPE = 0  # 空动画
+READYSTART = 1  # 电梯即将运动
+READYSTOP = 2  # 电梯即将停止
+
+GOUP = 1  # 用户要上行
+GODOWN = 2  # 用户要下行
+
 
 class Controler(object):
     def __init__(self, Elev):
@@ -64,14 +71,18 @@ class Controler(object):
     # 开关门槽函数
     def doorCtrl(self, whichelev, whichcommand):
         if whichcommand == 0:  # 如果用户要开门
-            if self.elev.doorState[whichelev] == CLOSED and self.elev.elevState[whichelev] == STANDSTILL:  # 如果当前门是关闭状态并且电梯是静止的
+            if self.elev.doorState[whichelev] == CLOSED and self.elev.elevState[
+                whichelev] == STANDSTILL:  # 如果当前门是关闭状态并且电梯是静止的
                 self.elev.doorState[whichelev] = OPEN  # 先将门状态更新为打开
+                self.elev.elevEnabled[whichelev] = False
 
                 self.openDoor_Anim(whichelev)
 
         else:  # 如果用户要关门
-            if self.elev.doorState[whichelev] == OPEN and self.elev.elevState[whichelev] == STANDSTILL:  # 如果当前门是打开状态并且电梯是静止的
+            if self.elev.doorState[whichelev] == OPEN and self.elev.elevState[
+                whichelev] == STANDSTILL:  # 如果当前门是打开状态并且电梯是静止的
                 self.elev.doorState[whichelev] = CLOSED  # 先将门状态更新为关闭
+                self.elev.elevEnabled[whichelev] = True
 
                 self.closeDoor_Anim(whichelev)
 
@@ -117,76 +128,96 @@ class Controler(object):
         self.elev.figure[whichelev].raise_()
         self.elev.figure[whichelev].setVisible(False)
 
-    # 电梯运动
+    # 内命令电梯运动
     def elevMove(self, whichelev, dest):
-        nowFloor = self.elev.elevNow[whichelev]     #获取当前电梯位置
-        if nowFloor < dest:             #如果按键大于当前楼层
-            if self.elev.elevState[whichelev] == STANDSTILL:
+        nowFloor = self.elev.elevNow[whichelev]  # 获取当前电梯位置
+        if nowFloor < dest:  # 如果按键大于当前楼层
+            if self.elev.elevState[whichelev] == STANDSTILL:  # 电梯处于静止状态
                 self.messQueue[whichelev].append(dest)
             else:
-                self.messQueue[whichelev].append(dest)      ####这里要检测顺路
-                self.messQueue[whichelev].sort()
+                if self.elev.elevState[whichelev] == RUNNING_UP:  # 电梯正在向上运行
+                    self.messQueue[whichelev].append(dest)
+                    self.messQueue[whichelev].sort()
+                elif self.elev.elevState[whichelev] == RUNNING_DOWN:  # 电梯正在向下运行
+                    self.messQueue_reverse[whichelev].append(dest)  # 先把目标楼层存在不顺路队列中
+                    self.messQueue_reverse[whichelev].sort()
         elif nowFloor > dest:
             if self.elev.elevState[whichelev] == STANDSTILL:
                 self.messQueue[whichelev].append(dest)
             else:
-                self.messQueue[whichelev].append(dest)  ####这里要检测顺路
-                self.messQueue[whichelev].sort()
-                self.messQueue[whichelev].reverse()
-        else:                           #如果按键就为当前楼层
-            if self.elev.elevState[whichelev] == STANDSTILL:     #电梯静止 => 打开门(并等待用户自行关闭)
-                self.elev.doorState[whichelev]=OPEN
+                if self.elev.elevState[whichelev] == RUNNING_DOWN:
+                    self.messQueue[whichelev].append(dest)
+                    self.messQueue[whichelev].sort()
+                    self.messQueue[whichelev].reverse()
+                elif self.elev.elevState[whichelev] == RUNNING_UP:
+                    self.messQueue_reverse[whichelev].append(dest)
+                    self.messQueue_reverse[whichelev].sort()
+                    self.messQueue_reverse[whichelev].reverse()
+        else:  # 如果按键就为当前楼层
+            if self.elev.elevState[whichelev] == STANDSTILL:  # 电梯静止 => 打开门(并等待用户自行关闭)
+                self.elev.doorState[whichelev] = OPEN
                 self.openDoor_Anim(whichelev)
 
-            button = self.elev.findChild(QtWidgets.QPushButton,"button {0} {1}".format(whichelev, nowFloor))
+            button = self.elev.findChild(QtWidgets.QPushButton, "button {0} {1}".format(whichelev, nowFloor))
             button.setStyleSheet("")
             button.setEnabled(True)
 
+        # print(self.messQueue[whichelev])
 
-        print(self.messQueue[whichelev])
-
+  
 
     # 更新电梯状态
     def updateElevState(self):
         # print('timer clock......')
 
         for i in range(0, len(self.messQueue)):
-            if len(self.messQueue[i]):                      #某个电梯的消息队列不为空
-                if self.elev.doorState[i]==OPEN:        #如果电梯门是打开的 => 等待电梯关门
+            if len(self.messQueue[i]):  # 某个电梯的消息队列不为空
+                if self.elev.doorState[i] == OPEN:  # 如果电梯门是打开的 => 等待电梯关门
                     continue
-                elif self.elev.elevState[i]==STANDSTILL:      #电梯处于静止状态
+                elif self.elev.elevState[i] == STANDSTILL:  # 电梯处于静止状态
                     self.openDoor_Anim(i)
                     self.figureIn_Anim(i)
-                    self.elev.elevState[i] = READYSTART     #变为就绪运行状态
-                elif self.elev.elevState[i]==READYSTART:    #电梯处于就绪运行状态
+
+                    if self.elev.elevNow[i] < self.messQueue[i][0]:
+                        self.elev.elevState[i] = RUNNING_UP
+                    elif self.elev.elevNow[i] > self.messQueue[i][0]:
+                        self.elev.elevState[i] = RUNNING_DOWN
+
+                    self.elev.animState[i] = READYSTART  # 变为就绪运行状态
+                elif self.elev.animState[i] == READYSTART:  # 电梯处于就绪运行状态
                     self.closeDoor_Anim(i)
-                    self.elev.elevState[i]=RUNNING          #变为运行状态
-                elif self.elev.elevState[i]==READYSTOP:     #电梯处于就绪停止状态
+                    self.elev.animState[i] = NOPE  # 变为运行状态
+                elif self.elev.animState[i] == READYSTOP:  # 电梯处于就绪停止状态
                     self.messQueue[i].pop(0)
                     self.closeDoor_Anim(i)
-                    self.elev.elevState[i]=STANDSTILL       #变为静止状态
+                    self.elev.animState[i] = NOPE
+                    self.elev.elevState[i] = STANDSTILL  # 变为静止状态
                     self.elev.stateshow[i].setStyleSheet("QGraphicsView{border-image: url(Resources/Button/state.png)}")
                 else:
                     destFloor = self.messQueue[i][0]
                     if self.elev.elevNow[i] < destFloor:
-                        self.elev.stateshow[i].setStyleSheet("QGraphicsView{border-image: url(Resources/Button/state_up.png)}")
+                        self.elev.elevState[i] = RUNNING_UP
+                        self.elev.stateshow[i].setStyleSheet(
+                            "QGraphicsView{border-image: url(Resources/Button/state_up.png)}")
                         self.elev.elevNow[i] = self.elev.elevNow[i] + 1
                         self.elev.lcdNumber[i].setProperty("value", self.elev.elevNow[i])
                     elif self.elev.elevNow[i] > destFloor:
-                        self.elev.stateshow[i].setStyleSheet("QGraphicsView{border-image: url(Resources/Button/state_down.png)}")
+                        self.elev.elevState[i] = RUNNING_DOWN
+                        self.elev.stateshow[i].setStyleSheet(
+                            "QGraphicsView{border-image: url(Resources/Button/state_down.png)}")
                         self.elev.elevNow[i] = self.elev.elevNow[i] - 1
                         self.elev.lcdNumber[i].setProperty("value", self.elev.elevNow[i])
-                    else:
+                    else:  # 电梯到达目的地
                         self.openDoor_Anim(i)
                         self.figureOut_Anim(i)
-                        self.elev.elevState[i]=READYSTOP     #到达目的地变为就绪停止状态
+                        self.elev.animState[i] = READYSTOP  # 到达目的地变为就绪停止状态
                         button = self.elev.findChild(QtWidgets.QPushButton,
-                                                         "button {0} {1}".format(i, self.elev.elevNow[i]))
+                                                     "button {0} {1}".format(i, self.elev.elevNow[i]))
                         button.setStyleSheet("")
                         button.setEnabled(True)
-
-
-
+            elif len(self.messQueue_reverse[i]):
+                self.messQueue[i] = self.messQueue_reverse[i].copy()
+                self.messQueue_reverse[i].clear()
 
         # 电梯在运行过程中禁止点击报警键
         for i in range(0, 5):
