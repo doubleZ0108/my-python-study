@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from dispatch import Controler
 from PyQt5.QtCore import *
 
-OPEN = 0  # 开门装填
+OPEN = 0  # 开门状态
 CLOSED = 1  # 关门状态
 
 STANDSTILL = 0  # 静止状态
@@ -21,11 +21,13 @@ GODOWN = 2  # 用户要下行
 
 class Ui_MainWindow(object):
     def __init__(self):
+        #与调度文件建立连接
         self.Ctrl = Controler(self)
+
         self.elevEnabled = [True] * 5  # 电梯状态(可使用/禁用)标志位
         self.doorState = [CLOSED] * 5  # 电梯门状态(开门/关门)标志位
-        self.elevState = [STANDSTILL] * 5  # 电梯状态(/运行向上/运行向下/静止)标志位
-        self.animState = [NOPE] * 5
+        self.elevState = [STANDSTILL] * 5  # 电梯状态(运行向上/运行向下/静止)标志位
+        self.animState = [NOPE] * 5  # 动画播放状态(空/即将运动/即将停止)标志位
         self.elevNow = [1] * 5  # 电梯楼层
 
     def setupUi(self, MainWindow):
@@ -104,7 +106,7 @@ class Ui_MainWindow(object):
             self.lcdNumber.append(QtWidgets.QLCDNumber(self.centralwidget))
             self.lcdNumber[i].setGeometry(QtCore.QRect(lcdNumber_pos[i], 420, 51, 41))
             self.lcdNumber[i].setDigitCount(2)
-            self.lcdNumber[i].setProperty("value", 1.0)
+            self.lcdNumber[i].setProperty("value", 1.0)  # 设置初始楼层为1层
             self.lcdNumber[i].setObjectName("lcdNumber" + str(i))
         # endregion
 
@@ -139,7 +141,7 @@ class Ui_MainWindow(object):
                                               "QPushButton:pressed{border-image: url(Resources/Button/doordown_pressed.png)}")
             self.downdoorbtn[i].setObjectName("downdoorbtn" + str(i))
 
-            self.updoorbtn[i].clicked.connect(MainWindow.chooseClick)
+            self.updoorbtn[i].clicked.connect(MainWindow.chooseClick)  # 绑定外命令槽函数
             self.downdoorbtn[i].clicked.connect(MainWindow.chooseClick)
         # endregion
 
@@ -151,9 +153,8 @@ class Ui_MainWindow(object):
             self.warnbtn[i].setGeometry(QtCore.QRect(warnbtn_pos[i] + 10, 620, 56, 31))
             self.warnbtn[i].setStyleSheet("background-color: rgb(180, 0, 0);")
             self.warnbtn[i].setObjectName("warnbtn" + str(i))
-            self.warnbtn[i].isEnabled()
 
-        # 绑定点击事件
+        # 绑定报警器槽函数
         for i in range(0, len(self.warnbtn)):
             self.warnbtn[i].clicked.connect(MainWindow.warningClick)
 
@@ -174,13 +175,13 @@ class Ui_MainWindow(object):
         names = ['19', '20', '17', '18', '15', '16', '13', '14', '11', '12', '9', '10', '7', '8', '5', '6', '3', '4',
                  '1', '2']
 
-        positions = [(i, j) for i in range(10) for j in range(2)]  # 构造五行四列的格子
+        positions = [(i, j) for i in range(10) for j in range(2)]  # 构造十行两列的格子
         for i in range(0, len(gridLayoutWidget_pos)):
             for position, name in zip(positions, names):
                 button = QtWidgets.QPushButton(name)
                 button.setObjectName("button " + str(i) + ' ' + name)
                 button.setStyleSheet("")
-                button.clicked.connect(MainWindow.btnClick)
+                button.clicked.connect(MainWindow.btnClick)  # 绑定楼层按键槽函数
                 self.gridLayout[i].addWidget(button, *position)  # 放到布局里
         # endregion
 
@@ -197,7 +198,7 @@ class Ui_MainWindow(object):
             self.closebtn[i].setGeometry(QtCore.QRect(closebtn_pos[i] + 10, 580, 31, 31))
             self.closebtn[i].setObjectName("closebtn" + str(i))
 
-            self.openbtn[i].clicked.connect(MainWindow.doorClick)
+            self.openbtn[i].clicked.connect(MainWindow.doorClick)  # 绑定门开关键槽函数
             self.closebtn[i].clicked.connect(MainWindow.doorClick)
         # endregion
 
@@ -206,7 +207,7 @@ class Ui_MainWindow(object):
         self.comboBox.setGeometry(QtCore.QRect(630, 55, 111, 31))
         self.comboBox.setObjectName("comboBox")
         for i in range(0, 20):
-            self.comboBox.addItem(str(i + 1))
+            self.comboBox.addItem(str(i + 1))  # 加入楼层信息
 
         self.chooselabel = QtWidgets.QLabel(self.centralwidget)
         self.chooselabel.setGeometry(QtCore.QRect(450, 60, 161, 21))
@@ -228,7 +229,7 @@ class Ui_MainWindow(object):
                                    "QPushButton:pressed{border-image: url(Resources/Button/down_pressed.png)}")
         self.downbtn.setObjectName("downbtn")
 
-        self.upbtn.clicked.connect(MainWindow.chooseClick)
+        self.upbtn.clicked.connect(MainWindow.chooseClick)  # 绑定外命令槽函数
         self.downbtn.clicked.connect(MainWindow.chooseClick)
         # endregion
 
@@ -272,6 +273,7 @@ class Ui_MainWindow(object):
             self.openbtn[i].setText(_translate("MainWindow", "开"))
             self.closebtn[i].setText(_translate("MainWindow", "关"))
 
+    # 报警器槽函数
     def warningClick(self):
         which_warnbtn = int(self.sender().objectName()[-1])
         print("点击了{0}号报警器".format(which_warnbtn))
@@ -282,6 +284,7 @@ class Ui_MainWindow(object):
 
         self.Ctrl.warnCtrl(which_warnbtn)  # 调用控制器进行warnCtrl处理
 
+    # 楼层按键槽函数
     def btnClick(self):
         whichbtn = self.sender()
 
@@ -291,9 +294,9 @@ class Ui_MainWindow(object):
         whichfloor = buf[1]
         print("{0}号电梯, {1}按键被按".format(whichelev, whichfloor))
 
-        whichbtn.setStyleSheet("background-color: rgb(255, 150, 3);")
-        whichbtn.setEnabled(False)
-        self.Ctrl.elevMove(whichelev, whichfloor)
+        whichbtn.setStyleSheet("background-color: rgb(255, 150, 3);")  # 改变按钮背景颜色(模拟点击状态)
+        whichbtn.setEnabled(False)  # 将该按钮设置为不可点击状态
+        self.Ctrl.elevMove(whichelev, whichfloor)  # 调用控制器进行elevMove处理
 
     def chooseClick(self):
         whichfloor = int(self.comboBox.currentText())
@@ -305,7 +308,7 @@ class Ui_MainWindow(object):
 
         print("用户选择了 {0} {1}".format(whichfloor, choice))
 
-        self.Ctrl.chooseCtrl(whichfloor, choice)
+        self.Ctrl.chooseCtrl(whichfloor, choice)  # 调用控制器进行chooseCtrl处理
 
     def doorClick(self):
         objectName = self.sender().objectName()
@@ -313,4 +316,4 @@ class Ui_MainWindow(object):
         whichcommand = 0 if objectName[0] == 'o' else 1  # 0 => 开门    1 => 关门
         print("{0}号电梯, 命令是{1}".format(whichelev, whichcommand))
 
-        self.Ctrl.doorCtrl(whichelev, whichcommand)
+        self.Ctrl.doorCtrl(whichelev, whichcommand)  # 调用控制器进行doorCtrl处理
