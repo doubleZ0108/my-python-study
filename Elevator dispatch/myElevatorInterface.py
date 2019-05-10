@@ -21,14 +21,30 @@ GODOWN = 2  # 用户要下行
 
 class Ui_MainWindow(object):
     def __init__(self):
-        #与调度文件建立连接
-        self.Ctrl = Controler(self)
+        self.Ctrl = Controler(self)  # 与调度文件建立连接
 
         self.elevEnabled = [True] * 5  # 电梯状态(可使用/禁用)标志位
         self.doorState = [CLOSED] * 5  # 电梯门状态(开门/关门)标志位
         self.elevState = [STANDSTILL] * 5  # 电梯状态(运行向上/运行向下/静止)标志位
         self.animState = [NOPE] * 5  # 动画播放状态(空/即将运动/即将停止)标志位
         self.elevNow = [1] * 5  # 电梯楼层
+
+        self.wall = []  # 墙模型
+        self.elevator_back = []  # 电梯模型
+        self.elevator_front = []
+        self.elevator_Anim = []
+        self.label = []
+        self.lcdNumber = []  # 数码管模型
+        self.stateshow = []  # 上下行标志模型
+        self.updoorbtn = []  # 门口上下行按钮模型
+        self.downdoorbtn = []
+        self.warnbtn = []  # 报警器模型
+        self.gridLayoutWidget = []  # 楼层按键模型
+        self.gridLayout = []
+        self.openbtn = []  # 开关键模型
+        self.closebtn = []
+        self.figure = []  # 小人模型
+        self.figure_Anim = []
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -39,7 +55,7 @@ class Ui_MainWindow(object):
 
         # region 墙模型
         wall_pos = [10, 280, 560, 840, 1120, 1390]
-        self.wall = []
+
         for i in range(0, len(wall_pos)):
             self.wall.append(QtWidgets.QGraphicsView(self.centralwidget))
             self.wall[i].setGeometry(QtCore.QRect(wall_pos[i], 120, 10, 560))
@@ -50,9 +66,7 @@ class Ui_MainWindow(object):
 
         # region 电梯模型
         elevator_pos = [30, 300, 580, 860, 1140]
-        self.elevator_back = []
-        self.elevator_front = []
-        self.elevator_Anim = []
+
         for i in range(0, len(elevator_pos)):
             # 后面的电梯背景
             self.elevator_back.append(QtWidgets.QGraphicsView(self.centralwidget))
@@ -89,7 +103,6 @@ class Ui_MainWindow(object):
         font.setWeight(50)
 
         label_pos = [70, 340, 620, 900, 1180]
-        self.label = []
         for i in range(0, len(label_pos)):
             self.label.append(QtWidgets.QLabel(self.centralwidget))
             self.label[i].setGeometry(QtCore.QRect(label_pos[i], 640, 51, 21))
@@ -101,7 +114,6 @@ class Ui_MainWindow(object):
 
         # region 电梯楼层数码管
         lcdNumber_pos = [50, 320, 600, 880, 1160]
-        self.lcdNumber = []
         for i in range(0, len(lcdNumber_pos)):
             self.lcdNumber.append(QtWidgets.QLCDNumber(self.centralwidget))
             self.lcdNumber[i].setGeometry(QtCore.QRect(lcdNumber_pos[i], 420, 51, 41))
@@ -112,7 +124,6 @@ class Ui_MainWindow(object):
 
         # region 电梯上下行标志
         stateshow_pos = [95, 365, 645, 925, 1205]
-        self.stateshow = []
         for i in range(0, len(stateshow_pos)):
             self.stateshow.append(QtWidgets.QGraphicsView(self.centralwidget))
             self.stateshow[i].setGeometry(QtCore.QRect(stateshow_pos[i], 410, 71, 61))
@@ -122,8 +133,7 @@ class Ui_MainWindow(object):
 
         # region 门口按钮
         doorbtn_pos = [157, 427, 707, 987, 1267]
-        self.updoorbtn = []
-        self.downdoorbtn = []
+
         for i in range(0, len(doorbtn_pos)):
             # 上行按钮
             self.updoorbtn.append(QtWidgets.QPushButton(self.centralwidget))
@@ -147,7 +157,6 @@ class Ui_MainWindow(object):
 
         # region 报警器模型
         warnbtn_pos = [190, 460, 740, 1020, 1300]
-        self.warnbtn = []
         for i in range(0, len(warnbtn_pos)):
             self.warnbtn.append(QtWidgets.QPushButton(self.centralwidget))
             self.warnbtn[i].setGeometry(QtCore.QRect(warnbtn_pos[i] + 10, 620, 56, 31))
@@ -162,8 +171,7 @@ class Ui_MainWindow(object):
 
         # region 楼层按键建模
         gridLayoutWidget_pos = [180, 450, 730, 1010, 1290]
-        self.gridLayoutWidget = []
-        self.gridLayout = []
+
         for i in range(0, len(gridLayoutWidget_pos)):
             self.gridLayoutWidget.append(QtWidgets.QWidget(self.centralwidget))
             self.gridLayoutWidget[i].setGeometry(QtCore.QRect(gridLayoutWidget_pos[i] + 10, 120, 81, 451))
@@ -188,8 +196,7 @@ class Ui_MainWindow(object):
         # region 开关键模型
         openbtn_pos = [180, 450, 730, 1010, 1290]
         closebtn_pos = [230, 500, 780, 1060, 1340]
-        self.openbtn = []
-        self.closebtn = []
+
         for i in range(0, len(openbtn_pos)):
             self.openbtn.append(QtWidgets.QPushButton(self.centralwidget))
             self.openbtn[i].setGeometry(QtCore.QRect(openbtn_pos[i] + 10, 580, 31, 31))
@@ -235,8 +242,7 @@ class Ui_MainWindow(object):
 
         # region 小人模型
         figure_pos = [30, 300, 580, 860, 1140]
-        self.figure = []
-        self.figure_Anim = []
+
         for i in range(0, len(figure_pos)):
             self.figure.append(QtWidgets.QGraphicsView(self.centralwidget))
             self.figure[i].setGeometry(QtCore.QRect(figure_pos[i] - 20, 590, 71, 71))
@@ -298,18 +304,32 @@ class Ui_MainWindow(object):
         whichbtn.setEnabled(False)  # 将该按钮设置为不可点击状态
         self.Ctrl.elevMove(whichelev, whichfloor)  # 调用控制器进行elevMove处理
 
+    # 外命令选择槽函数
     def chooseClick(self):
         whichfloor = int(self.comboBox.currentText())
         whichbtn = self.sender().objectName()
+
         if whichbtn[0] == 'd':
+            if whichbtn != "downbtn":  # 如果是电梯门前的按钮
+                for i in range(0, len(self.downdoorbtn)):
+                    if self.elevEnabled[i]:
+                        self.downdoorbtn[i].setStyleSheet(
+                            "QPushButton{border-image: url(Resources/Button/doordown_pressed.png)}")
             choice = GODOWN
         else:
+            if whichbtn != "upbtn":  # 如果是电梯门前的按钮
+                for i in range(0, len(self.downdoorbtn)):
+                    if self.elevEnabled[i]:
+                        self.updoorbtn[i].setStyleSheet(
+                            "QPushButton{border-image: url(Resources/Button/doorup_pressed.png)}")
+
             choice = GOUP
 
         print("用户选择了 {0} {1}".format(whichfloor, choice))
 
         self.Ctrl.chooseCtrl(whichfloor, choice)  # 调用控制器进行chooseCtrl处理
 
+    # 开关门槽函数
     def doorClick(self):
         objectName = self.sender().objectName()
         whichelev = int(objectName[-1])
