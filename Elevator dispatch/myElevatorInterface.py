@@ -4,18 +4,29 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from dispatch import Controler
 from PyQt5.QtCore import *
 
-OPEN = 0        #开门装填
-CLOSED = 1      #关门状态
-RUNNING_UP = 2     #运行(向上)状态
-RUNNING_DOWN = 3    #运行(向下)状态
+OPEN = 0  # 开门装填
+CLOSED = 1  # 关门状态
+
+STANDSTILL = 0  # 静止状态
+RUNNING_UP = 1  # 电梯上行状态
+RUNNING_DOWN = 2  # 电梯下行状态
+
+NOPE = 0  # 空动画
+READYSTART = 1  # 电梯即将运动
+READYSTOP = 2  # 电梯即将停止
+
+GOUP = 1  # 用户要上行
+GODOWN = 2  # 用户要下行
 
 
 class Ui_MainWindow(object):
     def __init__(self):
         self.Ctrl = Controler(self)
         self.elevEnabled = [True] * 5  # 电梯状态(可使用/禁用)标志位
-        self.elevState = [CLOSED] * 5  # 电梯状态(开门/关门/运行向上/运行向下)标志位
-        self.elevNow = [1] * 5      #电梯楼层
+        self.doorState = [CLOSED] * 5  # 电梯门状态(开门/关门)标志位
+        self.elevState = [STANDSTILL] * 5  # 电梯状态(/运行向上/运行向下/静止)标志位
+        self.animState = [NOPE] * 5
+        self.elevNow = [1] * 5  # 电梯楼层
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -25,7 +36,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
 
         # region 墙模型
-        wall_pos = [10, 280, 560, 840, 1120, 1380]
+        wall_pos = [10, 280, 560, 840, 1120, 1390]
         self.wall = []
         for i in range(0, len(wall_pos)):
             self.wall.append(QtWidgets.QGraphicsView(self.centralwidget))
@@ -53,7 +64,7 @@ class Ui_MainWindow(object):
             self.elevator_front[2 * i].setStyleSheet("background-color: rgb(160, 160, 160);")
             self.elevator_front[2 * i].setObjectName("elevator_front" + str(2 * i))
             self.elevator_Anim.append(QPropertyAnimation(self.elevator_front[2 * i], b"geometry"))
-            self.elevator_Anim[2 * i].setDuration(2000)  # 设定动画时间
+            self.elevator_Anim[2 * i].setDuration(1000)  # 设定动画时间
             self.elevator_Anim[2 * i].setStartValue(QtCore.QRect(elevator_pos[i], 470, 64, 161))  # 设置起始大小
             self.elevator_Anim[2 * i].setEndValue(QtCore.QRect(elevator_pos[i], 470, 8, 161))  # 设置终止大小
 
@@ -62,7 +73,7 @@ class Ui_MainWindow(object):
             self.elevator_front[2 * i + 1].setStyleSheet("background-color: rgb(160, 160, 160);")
             self.elevator_front[2 * i + 1].setObjectName("elevator_front" + str(2 * i + 1))
             self.elevator_Anim.append(QPropertyAnimation(self.elevator_front[2 * i + 1], b"geometry"))
-            self.elevator_Anim[2 * i + 1].setDuration(2000)
+            self.elevator_Anim[2 * i + 1].setDuration(1000)
             self.elevator_Anim[2 * i + 1].setStartValue(QtCore.QRect(elevator_pos[i] + 67, 470, 64, 161))
             self.elevator_Anim[2 * i + 1].setEndValue(QtCore.QRect(elevator_pos[i] + 123, 470, 8, 161))
         # endregion
@@ -107,18 +118,45 @@ class Ui_MainWindow(object):
             self.stateshow[i].setObjectName("stateshow" + str(i))
         # endregion
 
+        # region 门口按钮
+        doorbtn_pos = [157, 427, 707, 987, 1267]
+        self.updoorbtn = []
+        self.downdoorbtn = []
+        for i in range(0, len(doorbtn_pos)):
+            # 上行按钮
+            self.updoorbtn.append(QtWidgets.QPushButton(self.centralwidget))
+            self.updoorbtn[i].setGeometry(QtCore.QRect(doorbtn_pos[i], 550, 35, 30))
+            self.updoorbtn[i].setStyleSheet("QPushButton{border-image: url(Resources/Button/doorup.png)}"
+                                            "QPushButton:hover{border-image: url(Resources/Button/doorup_hover.png)}"
+                                            "QPushButton:pressed{border-image: url(Resources/Button/doorup_pressed.png)}")
+            self.updoorbtn[i].setObjectName("updoorbtn" + str(i))
+
+            # 上行按钮
+            self.downdoorbtn.append(QtWidgets.QPushButton(self.centralwidget))
+            self.downdoorbtn[i].setGeometry(QtCore.QRect(doorbtn_pos[i], 585, 35, 30))
+            self.downdoorbtn[i].setStyleSheet("QPushButton{border-image: url(Resources/Button/doordown.png)}"
+                                              "QPushButton:hover{border-image: url(Resources/Button/doordown_hover.png)}"
+                                              "QPushButton:pressed{border-image: url(Resources/Button/doordown_pressed.png)}")
+            self.downdoorbtn[i].setObjectName("downdoorbtn" + str(i))
+
+            self.updoorbtn[i].clicked.connect(MainWindow.chooseClick)
+            self.downdoorbtn[i].clicked.connect(MainWindow.chooseClick)
+        # endregion
+
         # region 报警器模型
         warnbtn_pos = [190, 460, 740, 1020, 1300]
         self.warnbtn = []
         for i in range(0, len(warnbtn_pos)):
             self.warnbtn.append(QtWidgets.QPushButton(self.centralwidget))
-            self.warnbtn[i].setGeometry(QtCore.QRect(warnbtn_pos[i], 620, 56, 31))
+            self.warnbtn[i].setGeometry(QtCore.QRect(warnbtn_pos[i] + 10, 620, 56, 31))
             self.warnbtn[i].setStyleSheet("background-color: rgb(180, 0, 0);")
             self.warnbtn[i].setObjectName("warnbtn" + str(i))
+            self.warnbtn[i].isEnabled()
 
         # 绑定点击事件
         for i in range(0, len(self.warnbtn)):
             self.warnbtn[i].clicked.connect(MainWindow.warningClick)
+
         # endregion
 
         # region 楼层按键建模
@@ -127,7 +165,7 @@ class Ui_MainWindow(object):
         self.gridLayout = []
         for i in range(0, len(gridLayoutWidget_pos)):
             self.gridLayoutWidget.append(QtWidgets.QWidget(self.centralwidget))
-            self.gridLayoutWidget[i].setGeometry(QtCore.QRect(gridLayoutWidget_pos[i], 120, 81, 451))
+            self.gridLayoutWidget[i].setGeometry(QtCore.QRect(gridLayoutWidget_pos[i] + 10, 120, 81, 451))
             self.gridLayoutWidget[i].setObjectName("gridLayoutWidget" + str(i))
             self.gridLayout.append(QtWidgets.QGridLayout(self.gridLayoutWidget[i]))
             self.gridLayout[i].setContentsMargins(0, 0, 0, 0)
@@ -141,6 +179,7 @@ class Ui_MainWindow(object):
             for position, name in zip(positions, names):
                 button = QtWidgets.QPushButton(name)
                 button.setObjectName("button " + str(i) + ' ' + name)
+                button.setStyleSheet("")
                 button.clicked.connect(MainWindow.btnClick)
                 self.gridLayout[i].addWidget(button, *position)  # 放到布局里
         # endregion
@@ -152,10 +191,10 @@ class Ui_MainWindow(object):
         self.closebtn = []
         for i in range(0, len(openbtn_pos)):
             self.openbtn.append(QtWidgets.QPushButton(self.centralwidget))
-            self.openbtn[i].setGeometry(QtCore.QRect(openbtn_pos[i], 580, 31, 31))
+            self.openbtn[i].setGeometry(QtCore.QRect(openbtn_pos[i] + 10, 580, 31, 31))
             self.openbtn[i].setObjectName("openbtn" + str(i))
             self.closebtn.append(QtWidgets.QPushButton(self.centralwidget))
-            self.closebtn[i].setGeometry(QtCore.QRect(closebtn_pos[i], 580, 31, 31))
+            self.closebtn[i].setGeometry(QtCore.QRect(closebtn_pos[i] + 10, 580, 31, 31))
             self.closebtn[i].setObjectName("closebtn" + str(i))
 
             self.openbtn[i].clicked.connect(MainWindow.doorClick)
@@ -204,7 +243,7 @@ class Ui_MainWindow(object):
             self.figure[i].setVisible(False)
             self.figure[i].setObjectName("figure" + str(i))
             self.figure_Anim.append(QPropertyAnimation(self.figure[i], b"geometry"))
-            self.figure_Anim[i].setDuration(3000)
+            self.figure_Anim[i].setDuration(1500)
             self.figure_Anim[i].setStartValue(QtCore.QRect(figure_pos[i] - 20, 590, 71, 71))
             self.figure_Anim[i].setEndValue(QtCore.QRect(figure_pos[i] + 10, 510, 111, 121))
         # endregion
@@ -236,10 +275,10 @@ class Ui_MainWindow(object):
     def warningClick(self):
         which_warnbtn = int(self.sender().objectName()[-1])
         print("点击了{0}号报警器".format(which_warnbtn))
-        self.warnbtn[int(which_warnbtn)].setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.warnbtn[which_warnbtn].setStyleSheet("background-color: rgb(255, 255, 255);")
         self.MessBox = QtWidgets.QMessageBox.information(self.warnbtn[int(which_warnbtn)], "警告",  # 弹出警告框
-                                                         "第" + which_warnbtn + "号电梯已损坏, 不能继续使用")
-        self.warnbtn[int(which_warnbtn)].setStyleSheet("background-color: rgb(180, 0, 0);")
+                                                         "第" + str(which_warnbtn) + "号电梯已损坏, 不能继续使用")
+        self.warnbtn[which_warnbtn].setStyleSheet("background-color: rgb(180, 0, 0);")
 
         self.Ctrl.warnCtrl(which_warnbtn)  # 调用控制器进行warnCtrl处理
 
@@ -247,19 +286,26 @@ class Ui_MainWindow(object):
         whichbtn = self.sender()
 
         btn_name = whichbtn.objectName()
-        buf = [int(s) for s in btn_name.split() if s.isdigit()]     #提取字符串中的数字
+        buf = [int(s) for s in btn_name.split() if s.isdigit()]  # 提取字符串中的数字
         whichelev = buf[0]
         whichfloor = buf[1]
         print("{0}号电梯, {1}按键被按".format(whichelev, whichfloor))
 
-        whichbtn.setStyleSheet("background-color: rgb(100, 0, 0);")
-
-        self.Ctrl.elevMove(whichelev, self.elevNow[whichelev], whichfloor)
+        whichbtn.setStyleSheet("background-color: rgb(255, 150, 3);")
+        whichbtn.setEnabled(False)
+        self.Ctrl.elevMove(whichelev, whichfloor)
 
     def chooseClick(self):
-        which_floor = self.comboBox.currentText()
-        which_btn = self.sender().objectName()
-        print("用户选择了" + str(which_floor) + which_btn)
+        whichfloor = int(self.comboBox.currentText())
+        whichbtn = self.sender().objectName()
+        if whichbtn[0] == 'd':
+            choice = GODOWN
+        else:
+            choice = GOUP
+
+        print("用户选择了 {0} {1}".format(whichfloor, choice))
+
+        self.Ctrl.chooseCtrl(whichfloor, choice)
 
     def doorClick(self):
         objectName = self.sender().objectName()
