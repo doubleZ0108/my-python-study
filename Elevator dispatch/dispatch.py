@@ -88,6 +88,15 @@ class Controler(object):
                 self.elev.doorState[whichelev] = CLOSED  # 先将门状态更新为关闭
                 self.elev.elevEnabled[whichelev] = True
 
+                #将电梯门前的上下行按键熄灭
+                for i in range(0, 5):
+                    if self.elev.elevEnabled[i]:
+                        self.elev.updoorbtn[i].setStyleSheet("QPushButton{border-image: url(Resources/Button/doorup.png)}"
+                                                        "QPushButton:hover{border-image: url(Resources/Button/doorup_hover.png)}"
+                                                        "QPushButton:pressed{border-image: url(Resources/Button/doorup_pressed.png)}")
+                        self.elev.downdoorbtn[i].setStyleSheet("QPushButton{border-image: url(Resources/Button/doordown.png)}"
+                                                          "QPushButton:hover{border-image: url(Resources/Button/doordown_hover.png)}"
+                                                          "QPushButton:pressed{border-image: url(Resources/Button/doordown_pressed.png)}")
                 self.closeDoor_Anim(whichelev)
 
     # 开门动画
@@ -199,7 +208,7 @@ class Controler(object):
                 dist[EnabledElev] = abs(self.elev.elevNow[EnabledElev] - whichfloor)
         # endregion
 
-        BestElev = dist.index(min(dist))  # 选择可调度性最好的电梯作为最佳地铁
+        BestElev = dist.index(min(dist))  # 选择可调度性最好的电梯作为最佳电梯
         if dist[BestElev] == 0:  # 如果最佳电梯就在用户选择的楼层
             self.elev.doorState[BestElev] = OPEN  # 打开门并等待用户自行关闭
             self.openDoor_Anim(BestElev)
