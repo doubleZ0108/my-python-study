@@ -367,7 +367,7 @@
                         
                         <div id="main" class="container">  
                             <div style="display: inline-block; margin-left: 20%;">
-                                <img id="source_img" src="">
+                                <img id="source_img" src="" draggable="false" />
                             </div>
                             
                             <div style="display: inline-block; margin-left: 10%;">
@@ -375,10 +375,10 @@
                                     <tbody>
                                         <tr>
                                             <td class="table-td">
-                                                <img class="min" id="img0" src="" alt="Norway" />
+                                                <img class="min" id="img0" src="" alt="Norway"/>
                                             </td>
                                             <td class="table-td">
-                                                <img class="min" id="img1" src="" alt="Norway" />
+                                                <img class="min" id="img1" src="" alt="Norway"/>
                                             </td>
                                             <td class="table-td">
                                                 <img class="min" id="img2" src="" alt="Norway" />
@@ -407,8 +407,14 @@
                                     </tbody>
                                 </table>
                             </div>
-                            
                         </div>
+
+                        <div style="margin-left: 70%;z-index: 9999; position: fixed ! important;
+                        right: 10%;top: 70%;">
+                            <img class="favorites" src="https://upload-images.jianshu.io/upload_images/12014150-8c29e9603105f48a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" id="favorites" 
+                            style="position: absolute;right: 0px; top: 0px;width: 140px; height: 130px;" draggable="false"/>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -482,6 +488,9 @@
         reader.readAsDataURL(file.files[0]);
     }	
 </script>
+
+
+
 </body>
 <script type="text/javascript" src="//img0.bdstatic.com/static/common/widget/ui/base/base_a66ce51.js"></script>
 <script type="text/javascript" src="//img1.bdstatic.com/static/home/widget/shitu/carousel/carousel_b51b2a8.js"></script>
@@ -527,4 +536,42 @@
     }
     ();
 </script>
+
+<script type="text/javascript">
+    document.addEventListener("dragstart", function(event) { 
+        console.log("start...")
+    //dataTransfer.setData()方法设置数据类型和拖动的数据 
+    event.dataTransfer.setData("Text", event.target.id); 
+    //修改拖动元素的透明度 
+    event.target.style.opacity = "0.4";
+});
+// 当拖完p元素输出一些文本元素和重置透明度 
+document.addEventListener("dragend", function(event) { 
+    event.target.style.opacity = "1"; 
+});
+// 当p元素完成拖动进入droptarget,改变div的边框样式 
+document.addEventListener("dragenter", function(event) { 
+    if ( event.target.className == "favorites" ) { 
+        console.log("ok...")
+    } 
+}); 
+
+/*对于drop,防止浏览器的默认处理数据(在drop中链接是默认打开) 
+复位输出文本的颜色和DIV的边框颜色 
+利用dataTransfer.getData()方法获得拖放数据 
+拖拖的数据元素id("drag1") 
+拖拽元素附加到drop元素*/ 
+document.addEventListener("drop", function(event) { 
+    event.preventDefault(); 
+    if ( event.target.className == "favorites" ) { 
+        event.target.src="https://upload-images.jianshu.io/upload_images/12014150-b2517cab8331e7fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
+    } 
+});
+
+// 默认情况下,数据/元素不能在其他元素中被拖放。对于drop我们必须防止元素的默认处理 
+document.addEventListener("dragover", function(event) { 
+    event.preventDefault(); 
+});
+</script>
+
 </html>
