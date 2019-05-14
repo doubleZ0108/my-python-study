@@ -20,13 +20,11 @@
             width: 180px;
             height: 180px;
         }
-
         .min {
             transition: 0.3s;
             width: 80px;
             height: 80px;
         }
-
         .table-td {
             transition: 0.3s;
             width: 80px;
@@ -53,7 +51,6 @@
     <!--幻灯片的轮播 & 识图一下点击事件-->
     <script type="text/javascript">
         require.siteNS && require.siteNS(["home", "common"]);
-
         require.resourceMap({
                 "res": {
                     "common:widget/ui/arch/router.js": {
@@ -61,41 +58,35 @@
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js"]
                     }
-
                     ,
                     "common:widget/ui/arch/app.js": {
                         "url": "//img2.bdstatic.com/static/common/widget/ui/arch/app_c1dac05.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js", "common:widget/ui/arch/router.js"]
                     }
-
                     ,
                     "common:widget/ui/base/EventDispatcher.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/base/EventDispatcher_e71d337.js",
                         "pkg": "common:p1"
                     }
-
                     ,
                     "common:widget/ui/base/events.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/base/events_f8b4e1f.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/EventDispatcher.js"]
                     }
-
                     ,
                     "common:widget/ui/arch/behavior/pageresizer.js": {
                         "url": "//img1.bdstatic.com/static/common/widget/ui/arch/behavior/pageresizer_9f05f70.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js"]
                     }
-
                     ,
                     "common:widget/ui/arch/localdb.js": {
                         "url": "//img1.bdstatic.com/static/common/widget/ui/arch/localdb_1fa8a65.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js"]
                     }
-
                     ,
                     "common:widget/ui/arch/collection.js": {
                         "url": "//img2.bdstatic.com/static/common/widget/ui/arch/collection_8624f21.js",
@@ -104,35 +95,30 @@
                             "common:widget/ui/arch/localdb.js"
                         ]
                     }
-
                     ,
                     "common:widget/ui/arch/handlers.js": {
                         "url": "//img2.bdstatic.com/static/common/widget/ui/arch/handlers_2d9d42f.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js"]
                     }
-
                     ,
                     "common:widget/ui/events/events.js": {
                         "url": "//img2.bdstatic.com/static/common/widget/ui/events/events_87337df.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/EventDispatcher.js"]
                     }
-
                     ,
                     "common:widget/ui/utils/scroller.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/utils/scroller_efc1f29.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js", "common:widget/ui/events/events.js"]
                     }
-
                     ,
                     "common:widget/ui/utils/pageresizer.js": {
                         "url": "//img1.bdstatic.com/static/common/widget/ui/utils/pageresizer_9feba52.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js", "common:widget/ui/events/events.js"]
                     }
-
                     ,
                     "common:widget/ui/utils/utils.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/utils/utils_bd26384.js",
@@ -141,7 +127,6 @@
                             "common:widget/ui/utils/pageresizer.js"
                         ]
                     }
-
                     ,
                     "common:widget/ui/arch/history.js": {
                         "url": "//img1.bdstatic.com/static/common/widget/ui/arch/history_dbb6541.js",
@@ -150,14 +135,12 @@
                             "common:widget/ui/base/events.js"
                         ]
                     }
-
                     ,
                     "common:widget/ui/arch/model.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/arch/model_32910e4.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js"]
                     }
-
                     ,
                     "common:widget/ui/arch/pagemodel.js": {
                         "url": "//img1.bdstatic.com/static/common/widget/ui/arch/pagemodel_8be1499.js",
@@ -166,34 +149,29 @@
                             "common:widget/ui/base/events.js", "common:widget/ui/arch/model.js"
                         ]
                     }
-
                     ,
                     "common:widget/ui/base/subject.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/base/subject_7c3c6c3.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js"]
                     }
-
                     ,
                     "common:widget/ui/EventEmitter/EventEmitter.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/EventEmitter/EventEmitter_655344a.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js"]
                     }
-
                     ,
                     "common:widget/ui/monitorRequest/monitorRequest.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/monitorRequest/monitorRequest_cabcf84.js",
                         "pkg": "common:p1"
                     }
-
                     ,
                     "common:widget/ui/searchUtils/searchUtils.js": {
                         "url": "//img1.bdstatic.com/static/common/widget/ui/searchUtils/searchUtils_17600ce.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js"]
                     }
-
                     ,
                     "common:widget/ui/slider/slider.js": {
                         "url": "//img1.bdstatic.com/static/common/widget/ui/slider/slider_545c0c2.js",
@@ -202,7 +180,6 @@
                             "common:widget/ui/EventEmitter/EventEmitter.js"
                         ]
                     }
-
                     ,
                     "common:widget/ui/statistic/statistic.js": {
                         "url": "//img2.bdstatic.com/static/common/widget/ui/statistic/statistic_09d1c4a.js",
@@ -212,7 +189,6 @@
                             "common:widget/ui/base/events.js", "common:widget/ui/utils/utils.js"
                         ]
                     }
-
                     ,
                     "common:widget/ui/suggest/data.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/suggest/data_89dc815.js",
@@ -221,21 +197,18 @@
                             "common:widget/ui/base/events.js"
                         ]
                     }
-
                     ,
                     "common:widget/ui/suggest/inputwatcher.js": {
                         "url": "//img2.bdstatic.com/static/common/widget/ui/suggest/inputwatcher_2eb7c40.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js"]
                     }
-
                     ,
                     "common:widget/ui/suggest/suggestionlist.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/suggest/suggestionlist_37c79c7.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js"]
                     }
-
                     ,
                     "common:widget/ui/suggest/suggestion.js": {
                         "url": "//img2.bdstatic.com/static/common/widget/ui/suggest/suggestion_1507f89.js",
@@ -245,7 +218,6 @@
                             "common:widget/ui/suggest/suggestionlist.js"
                         ]
                     }
-
                     ,
                     "common:widget/ui/sugHistory/sugHistory.js": {
                         "url": "//img2.bdstatic.com/static/common/widget/ui/sugHistory/sugHistory_4277c60.js",
@@ -254,20 +226,17 @@
                             "common:widget/ui/utils/utils.js"
                         ]
                     }
-
                     ,
                     "common:widget/ui/SugRec/SugRec.js": {
                         "url": "//img2.bdstatic.com/static/common/widget/ui/SugRec/SugRec_3755387.js",
                         "pkg": "common:p1",
                         "deps": ["common:widget/ui/base/base.js", "common:widget/ui/statistic/statistic.js"]
                     }
-
                     ,
                     "common:widget/ui/swf/swf.js": {
                         "url": "//img1.bdstatic.com/static/common/widget/ui/swf/swf_b5294d0.js",
                         "pkg": "common:p1"
                     }
-
                     ,
                     "common:widget/ui/userInfo/userInfo.js": {
                         "url": "//img1.bdstatic.com/static/common/widget/ui/userInfo/userInfo_4160d44.js",
@@ -276,19 +245,16 @@
                             "common:widget/ui/base/events.js", "common:widget/ui/utils/utils.js"
                         ]
                     }
-
                     ,
                     "common:widget/ui/feedback/feedback.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/ui/feedback/feedback_4002381.js",
                         "pkg": "common:p1"
                     }
-
                     ,
                     "common:widget/shitu/static/animate.js": {
                         "url": "//img1.bdstatic.com/static/common/widget/shitu/static/animate_d5993fc.js",
                         "deps": ["common:widget/ui/base/base.js"]
                     }
-
                     ,
                     "common:widget/shitu/run.js": {
                         "url": "//img0.bdstatic.com/static/common/widget/shitu/run_c4ee0ab.js",
@@ -296,13 +262,11 @@
                             "common:widget/shitu/static/animate.js"
                         ]
                     }
-
                     ,
                     "home:static/shitu/index.js": {
                         "url": "//img1.bdstatic.com/static/home/shitu/index_ba03d37.js"
                     }
                 }
-
                 ,
                 "pkg": {
                     "common:p1": {
@@ -310,10 +274,9 @@
                     }
                 }
             }
-
         );
     </script>
-
+    
     <div class='shitu-wrapper'>
         <div class='shitu-upper'>
 
@@ -372,7 +335,7 @@
                             font-size: 35px;border:4px rgb(32, 134, 218) solid;margin-bottom: 5px;">
                                     Chose your file to upload </b></td>
                             <div style="clear: both;"></div>
-                            <form method=post enctype=multipart/form-data"> <input type="file" name="file" required />
+                            <form method=post enctype=multipart/form-data"> <input type="file" name="file" required onchange="show(this)"/>
                             <input type=submit value="Search!" onclick="fun()">
                             </form>
                             <tr id="row1" style="display:none;">
@@ -388,68 +351,82 @@
                                 style="height:100px;weight:100px;display:none;">
                         </center>
 
-                        <div id="main" class="container" style="margin-left: 33%; margin-top: 3%;">
-                            <table id="table" class="table" style="display:none;">
-                                <tbody>
-                                    <tr>
-                                        <td class="table-td">
-                                            <img class="min" id="img0" src="" alt="Norway" />
-                                        </td>
-                                        <td class="table-td">
-                                            <img class="min" id="img1" src="" alt="Norway" />
-                                        </td>
-                                        <td class="table-td">
-                                            <img class="min" id="img2" src="" alt="Norway" />
-                                        </td>
-                                        <td class="table-td">
-                                            <img class="min" id="img3" src="" alt="Norway" />
-                                        </td>
-                                    </tr>
-                    
-                                    <tr>
-                                        
-                                        <td class="table-td">
-                                            <img class="min" id="img4" src="" alt="Norway" />
-                                        </td>
-                                        <td class="table-td">
-                                            <img class="min" id="img5" src="" alt="Norway" />
-                                        </td>
-                                        <td class="table-td">
-                                            <img class="min" id="img6" src="" alt="Norway" />
-                                        </td>
-                                        <td class="table-td">
-                                            <img class="min" id="img7" src="" alt="Norway" />
-                                        </td>
-                                    </tr>
-                    
-                                </tbody>
-                            </table>
+                        <center>
+                                <td>
+                                    <b id="retrieval-result1" style="color: rgb(103, 32, 218);
+                                    font-size: 15px;display: none;">
+                                            本次共检索到 </b>
+                                            <b id="retrieval-result2" style="color: rgb(255, 0, 0);
+                                    font-size: 15px;display: none;">
+                                            &nbsp;8&nbsp; </b>
+                                            <b id="retrieval-result3" style="color: rgb(103, 32, 218);
+                                    font-size: 15px;display: none;">
+                                            张相似图片 </b>
+                                </td>
+                        </center>
+                        
+                        <div id="main" class="container">  
+                            <div style="display: inline-block; margin-left: 20%;">
+                                <img id="source_img" src="">
+                            </div>
+                            
+                            <div style="display: inline-block; margin-left: 10%;">
+                                <table id="table" class="table" style="display:none;">
+                                    <tbody>
+                                        <tr>
+                                            <td class="table-td">
+                                                <img class="min" id="img0" src="" alt="Norway" />
+                                            </td>
+                                            <td class="table-td">
+                                                <img class="min" id="img1" src="" alt="Norway" />
+                                            </td>
+                                            <td class="table-td">
+                                                <img class="min" id="img2" src="" alt="Norway" />
+                                            </td>
+                                            <td class="table-td">
+                                                <img class="min" id="img3" src="" alt="Norway" />
+                                            </td>
+                                        </tr>
+                        
+                                        <tr>
+                                            
+                                            <td class="table-td">
+                                                <img class="min" id="img4" src="" alt="Norway" />
+                                            </td>
+                                            <td class="table-td">
+                                                <img class="min" id="img5" src="" alt="Norway" />
+                                            </td>
+                                            <td class="table-td">
+                                                <img class="min" id="img6" src="" alt="Norway" />
+                                            </td>
+                                            <td class="table-td">
+                                                <img class="min" id="img7" src="" alt="Norway" />
+                                            </td>
+                                        </tr>
+                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    
     <script type="text/javascript">
         function myFunction() {
-
             document.getElementById("predictedResult").innerHTML = "";
             $('#clear').hide();
         }
-
         function fun() {
-
             $('#load').show();
-
             $("form").submit(function (evt) {
                     //$('#loader-icon').show();
-
                     evt.preventDefault();
-
                     //$('#loader-icon').show();
                     var formData = new FormData($(this)[0]);
-
                     $.ajax({
                             url: 'imgUpload',
                             type: 'POST',
@@ -459,7 +436,6 @@
                             contentType: false,
                             enctype: 'multipart/form-data',
                             processData: false,
-
                             success: function (response) {
                                 $('#load').hide();
                                 $('#row1').show();
@@ -474,23 +450,38 @@
                                 document.getElementById("img5").src = response.image5;
                                 document.getElementById("img6").src = response.image6;
                                 document.getElementById("img7").src = response.image7;
-<!--                                document.getElementById("img8").src = response.image8;-->
+                                //document.getElementById("img8").src = response.image8;
                                 $('#table').show();
                                 $('#clear').show();
 
-
+                                //显示检索结果
+                                $('#retrieval-result1').show();
+                                $('#retrieval-result2').show();
+                                $('#retrieval-result3').show();
                             }
                         }
-
                     );
                     return false;
                 }
-
             )
         }
-
         ;
     </script>
+
+<script>		
+    function show(file){	
+        var reader = new FileReader();	// 实例化一个FileReader对象，用于读取文件
+        var source_img = document.getElementById('source_img'); 	// 获取要显示图片的标签
+        
+        //读取File对象的数据
+        reader.onload = function(evt){
+            source_img.width  =  "180";
+            source_img.height =  "180";
+            source_img.src = evt.target.result;
+        }
+        reader.readAsDataURL(file.files[0]);
+    }	
+</script>
 </body>
 <script type="text/javascript" src="//img0.bdstatic.com/static/common/widget/ui/base/base_a66ce51.js"></script>
 <script type="text/javascript" src="//img1.bdstatic.com/static/home/widget/shitu/carousel/carousel_b51b2a8.js"></script>
@@ -498,43 +489,33 @@
     ! function () {
         window.tn = 'shitu-index';
         window.vsid = "a4d652d612c306399706e6596e2e3eae7af7859c";
-
         require.async(["common:widget/ui/base/base", "common:widget/shitu/run"], function ($, shitu) {
                 $(document).ready(function () {
                         var st = new shitu();
                         st.init();
                         window.stInstance = st;
                     }
-
                 );
             }
-
         );
     }
-
     ();
-
     ! function () {
         require.async(["common:widget/ui/base/base"], function (e) {
                 e.browser.msie || e(".shitu-img").each(function (e, t) {
                         t.onselectstart = function () {
                                 return !1
                             }
-
                             , t.ondragstart = function (e) {
                                 return e.stopPropagation ? e.stopPropagation() : e.cancelBubble = !0, e
                                     .dataTransfer.dropEffect = "move", e.dataTransfer.effectAllowed = "move", !0
                             }
                     }
-
                 )
             }
-
         );
     }
-
     ();
-
     ! function () {
         window.shituTitles = [
             "\u4e1b\u6797\u4e2d\u7684\u751f\u547d\u5bc6\u7801\uff0c\u4f60\u8bfb\u61c2\u4e86\u591a\u5c11",
@@ -544,8 +525,6 @@
         ];
         require.async(["home:static/shitu/index"]);
     }
-
     ();
 </script>
-
 </html>
