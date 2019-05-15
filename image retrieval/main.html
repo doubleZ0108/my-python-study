@@ -39,9 +39,11 @@
             position: absolute;
             z-index: 10;
             top: 75%;
-            left: 63%;
-            width: 30px;
+            left: 59%;
+            width: 34px;
             height: 15px;
+            text-align：center;
+            line-height:15px;   
             font-size: 5px;
         }
     </style>
@@ -422,7 +424,7 @@
     </div>
 
     <script type="text/javascript">
-         var tags = null;
+        var tags = new Array();
 
         function myFunction() {
             document.getElementById("predictedResult").innerHTML = "";
@@ -451,6 +453,14 @@
                         //$('#clear').show();
                         //console.log(response[1]);
                         //document.getElementById("predictedResult").innerHTML= response;
+
+                        //先要设置tag => 动态添加button
+                        tags = response.tags
+                        console.log(tags)
+                        for (var i = 0; i < tags.length; ++i) {
+                            addrow(tags[i])
+                        }
+
                         document.getElementById("img0").src = response.image0[0];
                         document.getElementById("img1").src = response.image1[0];
                         document.getElementById("img2").src = response.image2[0];
@@ -491,12 +501,8 @@
                         document.getElementById("tagbtn7").append(response.image7[1])
                         document.getElementById("tagbtn7").name=response.image7[1]
                         document.getElementById("img7").name=response.image7[1]
-
-                        tags = response.tags
-                        console.log(tags)
-                        for (var i = 0; i < tags.length; ++i) {
-                            addrow(tags[i])
-                        }
+                        
+                        
 
                         //document.getElementById("img8").src = response.image8;
                         $('#table').show();
@@ -660,6 +666,7 @@
 
 <script type="text/javascript">
     function addrow(name) {
+        console.log("name is "+name)
         var c = document.getElementById('tagtable'); //获得表格的信息
         if (c.rows.length == 0) { //如果是向一个空表增加一行
             var x = c.insertRow(0); //向空表插入一行
@@ -677,21 +684,29 @@
     }
 
     function tagClick(e){
-        console.log(e.id)
-        visible_obj = document.getElementsByName(String(e.id));
-        for(var i=0;i<visible_obj.length;++i){
+        console.log(tags)
+        console.log("点击的是"+e.id)
+        visible_obj = document.getElementsByName(e.id);
+
+        //显示对应的图片
+        for(var i=0;i<visible_obj.length;i++){
             visible_obj[i].style.visibility="visible";
         }
+        //显示对应的图片标签
 
-        for (var i=0;i<tags.length;++i){
+
+        //隐藏对应的图片
+        for (var i=0;i<tags.length;i++){
             if(tags[i]!=e.id){
-                hidden_obj = document.getElementsByName(String(tags[i]));
-                for(var i=0;i<hidden_obj.length;++i){
-                    hidden_obj[i].style.visibility = "hidden";
-
+                hidden_obj = document.getElementsByName(tags[i]);
+                console.log(hidden_obj)
+                for(var j=0;j<hidden_obj.length;j++){
+                    hidden_obj[j].style.visibility = "hidden";
                 }
             }
         }
+        //隐藏对应的图片标签
+        
     }
 </script>
 
