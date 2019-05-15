@@ -20,11 +20,13 @@
             width: 180px;
             height: 180px;
         }
+
         .min {
             transition: 0.3s;
             width: 80px;
             height: 80px;
         }
+
         .table-td {
             transition: 0.3s;
             width: 80px;
@@ -41,7 +43,7 @@
             }
         });
     </script>
-    
+
     <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
     <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
@@ -52,231 +54,197 @@
     <script type="text/javascript">
         require.siteNS && require.siteNS(["home", "common"]);
         require.resourceMap({
-                "res": {
-                    "common:widget/ui/arch/router.js": {
-                        "url": "//img2.bdstatic.com/static/common/widget/ui/arch/router_1670dcf.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js"]
-                    }
-                    ,
-                    "common:widget/ui/arch/app.js": {
-                        "url": "//img2.bdstatic.com/static/common/widget/ui/arch/app_c1dac05.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/arch/router.js"]
-                    }
-                    ,
-                    "common:widget/ui/base/EventDispatcher.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/base/EventDispatcher_e71d337.js",
-                        "pkg": "common:p1"
-                    }
-                    ,
-                    "common:widget/ui/base/events.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/base/events_f8b4e1f.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/EventDispatcher.js"]
-                    }
-                    ,
-                    "common:widget/ui/arch/behavior/pageresizer.js": {
-                        "url": "//img1.bdstatic.com/static/common/widget/ui/arch/behavior/pageresizer_9f05f70.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js"]
-                    }
-                    ,
-                    "common:widget/ui/arch/localdb.js": {
-                        "url": "//img1.bdstatic.com/static/common/widget/ui/arch/localdb_1fa8a65.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js"]
-                    }
-                    ,
-                    "common:widget/ui/arch/collection.js": {
-                        "url": "//img2.bdstatic.com/static/common/widget/ui/arch/collection_8624f21.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js",
-                            "common:widget/ui/arch/localdb.js"
-                        ]
-                    }
-                    ,
-                    "common:widget/ui/arch/handlers.js": {
-                        "url": "//img2.bdstatic.com/static/common/widget/ui/arch/handlers_2d9d42f.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js"]
-                    }
-                    ,
-                    "common:widget/ui/events/events.js": {
-                        "url": "//img2.bdstatic.com/static/common/widget/ui/events/events_87337df.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/EventDispatcher.js"]
-                    }
-                    ,
-                    "common:widget/ui/utils/scroller.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/utils/scroller_efc1f29.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/events/events.js"]
-                    }
-                    ,
-                    "common:widget/ui/utils/pageresizer.js": {
-                        "url": "//img1.bdstatic.com/static/common/widget/ui/utils/pageresizer_9feba52.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/events/events.js"]
-                    }
-                    ,
-                    "common:widget/ui/utils/utils.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/utils/utils_bd26384.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/utils/scroller.js",
-                            "common:widget/ui/utils/pageresizer.js"
-                        ]
-                    }
-                    ,
-                    "common:widget/ui/arch/history.js": {
-                        "url": "//img1.bdstatic.com/static/common/widget/ui/arch/history_dbb6541.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/utils/utils.js",
-                            "common:widget/ui/base/events.js"
-                        ]
-                    }
-                    ,
-                    "common:widget/ui/arch/model.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/arch/model_32910e4.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js"]
-                    }
-                    ,
-                    "common:widget/ui/arch/pagemodel.js": {
-                        "url": "//img1.bdstatic.com/static/common/widget/ui/arch/pagemodel_8be1499.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/utils/utils.js",
-                            "common:widget/ui/base/events.js", "common:widget/ui/arch/model.js"
-                        ]
-                    }
-                    ,
-                    "common:widget/ui/base/subject.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/base/subject_7c3c6c3.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js"]
-                    }
-                    ,
-                    "common:widget/ui/EventEmitter/EventEmitter.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/EventEmitter/EventEmitter_655344a.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js"]
-                    }
-                    ,
-                    "common:widget/ui/monitorRequest/monitorRequest.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/monitorRequest/monitorRequest_cabcf84.js",
-                        "pkg": "common:p1"
-                    }
-                    ,
-                    "common:widget/ui/searchUtils/searchUtils.js": {
-                        "url": "//img1.bdstatic.com/static/common/widget/ui/searchUtils/searchUtils_17600ce.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js"]
-                    }
-                    ,
-                    "common:widget/ui/slider/slider.js": {
-                        "url": "//img1.bdstatic.com/static/common/widget/ui/slider/slider_545c0c2.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js",
-                            "common:widget/ui/EventEmitter/EventEmitter.js"
-                        ]
-                    }
-                    ,
-                    "common:widget/ui/statistic/statistic.js": {
-                        "url": "//img2.bdstatic.com/static/common/widget/ui/statistic/statistic_09d1c4a.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js",
-                            "common:widget/ui/monitorRequest/monitorRequest.js",
-                            "common:widget/ui/base/events.js", "common:widget/ui/utils/utils.js"
-                        ]
-                    }
-                    ,
-                    "common:widget/ui/suggest/data.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/suggest/data_89dc815.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/utils/utils.js",
-                            "common:widget/ui/base/events.js"
-                        ]
-                    }
-                    ,
-                    "common:widget/ui/suggest/inputwatcher.js": {
-                        "url": "//img2.bdstatic.com/static/common/widget/ui/suggest/inputwatcher_2eb7c40.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js"]
-                    }
-                    ,
-                    "common:widget/ui/suggest/suggestionlist.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/suggest/suggestionlist_37c79c7.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js"]
-                    }
-                    ,
-                    "common:widget/ui/suggest/suggestion.js": {
-                        "url": "//img2.bdstatic.com/static/common/widget/ui/suggest/suggestion_1507f89.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js",
-                            "common:widget/ui/suggest/data.js", "common:widget/ui/suggest/inputwatcher.js",
-                            "common:widget/ui/suggest/suggestionlist.js"
-                        ]
-                    }
-                    ,
-                    "common:widget/ui/sugHistory/sugHistory.js": {
-                        "url": "//img2.bdstatic.com/static/common/widget/ui/sugHistory/sugHistory_4277c60.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/statistic/statistic.js",
-                            "common:widget/ui/utils/utils.js"
-                        ]
-                    }
-                    ,
-                    "common:widget/ui/SugRec/SugRec.js": {
-                        "url": "//img2.bdstatic.com/static/common/widget/ui/SugRec/SugRec_3755387.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/statistic/statistic.js"]
-                    }
-                    ,
-                    "common:widget/ui/swf/swf.js": {
-                        "url": "//img1.bdstatic.com/static/common/widget/ui/swf/swf_b5294d0.js",
-                        "pkg": "common:p1"
-                    }
-                    ,
-                    "common:widget/ui/userInfo/userInfo.js": {
-                        "url": "//img1.bdstatic.com/static/common/widget/ui/userInfo/userInfo_4160d44.js",
-                        "pkg": "common:p1",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/searchUtils/searchUtils.js",
-                            "common:widget/ui/base/events.js", "common:widget/ui/utils/utils.js"
-                        ]
-                    }
-                    ,
-                    "common:widget/ui/feedback/feedback.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/ui/feedback/feedback_4002381.js",
-                        "pkg": "common:p1"
-                    }
-                    ,
-                    "common:widget/shitu/static/animate.js": {
-                        "url": "//img1.bdstatic.com/static/common/widget/shitu/static/animate_d5993fc.js",
-                        "deps": ["common:widget/ui/base/base.js"]
-                    }
-                    ,
-                    "common:widget/shitu/run.js": {
-                        "url": "//img0.bdstatic.com/static/common/widget/shitu/run_c4ee0ab.js",
-                        "deps": ["common:widget/ui/base/base.js", "common:widget/ui/utils/utils.js",
-                            "common:widget/shitu/static/animate.js"
-                        ]
-                    }
-                    ,
-                    "home:static/shitu/index.js": {
-                        "url": "//img1.bdstatic.com/static/home/shitu/index_ba03d37.js"
-                    }
+            "res": {
+                "common:widget/ui/arch/router.js": {
+                    "url": "//img2.bdstatic.com/static/common/widget/ui/arch/router_1670dcf.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js"]
+                },
+                "common:widget/ui/arch/app.js": {
+                    "url": "//img2.bdstatic.com/static/common/widget/ui/arch/app_c1dac05.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/arch/router.js"]
+                },
+                "common:widget/ui/base/EventDispatcher.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/base/EventDispatcher_e71d337.js",
+                    "pkg": "common:p1"
+                },
+                "common:widget/ui/base/events.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/base/events_f8b4e1f.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/EventDispatcher.js"]
+                },
+                "common:widget/ui/arch/behavior/pageresizer.js": {
+                    "url": "//img1.bdstatic.com/static/common/widget/ui/arch/behavior/pageresizer_9f05f70.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js"]
+                },
+                "common:widget/ui/arch/localdb.js": {
+                    "url": "//img1.bdstatic.com/static/common/widget/ui/arch/localdb_1fa8a65.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js"]
+                },
+                "common:widget/ui/arch/collection.js": {
+                    "url": "//img2.bdstatic.com/static/common/widget/ui/arch/collection_8624f21.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js",
+                        "common:widget/ui/arch/localdb.js"
+                    ]
+                },
+                "common:widget/ui/arch/handlers.js": {
+                    "url": "//img2.bdstatic.com/static/common/widget/ui/arch/handlers_2d9d42f.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js"]
+                },
+                "common:widget/ui/events/events.js": {
+                    "url": "//img2.bdstatic.com/static/common/widget/ui/events/events_87337df.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/EventDispatcher.js"]
+                },
+                "common:widget/ui/utils/scroller.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/utils/scroller_efc1f29.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/events/events.js"]
+                },
+                "common:widget/ui/utils/pageresizer.js": {
+                    "url": "//img1.bdstatic.com/static/common/widget/ui/utils/pageresizer_9feba52.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/events/events.js"]
+                },
+                "common:widget/ui/utils/utils.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/utils/utils_bd26384.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/utils/scroller.js",
+                        "common:widget/ui/utils/pageresizer.js"
+                    ]
+                },
+                "common:widget/ui/arch/history.js": {
+                    "url": "//img1.bdstatic.com/static/common/widget/ui/arch/history_dbb6541.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/utils/utils.js",
+                        "common:widget/ui/base/events.js"
+                    ]
+                },
+                "common:widget/ui/arch/model.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/arch/model_32910e4.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js"]
+                },
+                "common:widget/ui/arch/pagemodel.js": {
+                    "url": "//img1.bdstatic.com/static/common/widget/ui/arch/pagemodel_8be1499.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/utils/utils.js",
+                        "common:widget/ui/base/events.js", "common:widget/ui/arch/model.js"
+                    ]
+                },
+                "common:widget/ui/base/subject.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/base/subject_7c3c6c3.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js"]
+                },
+                "common:widget/ui/EventEmitter/EventEmitter.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/EventEmitter/EventEmitter_655344a.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js"]
+                },
+                "common:widget/ui/monitorRequest/monitorRequest.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/monitorRequest/monitorRequest_cabcf84.js",
+                    "pkg": "common:p1"
+                },
+                "common:widget/ui/searchUtils/searchUtils.js": {
+                    "url": "//img1.bdstatic.com/static/common/widget/ui/searchUtils/searchUtils_17600ce.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js"]
+                },
+                "common:widget/ui/slider/slider.js": {
+                    "url": "//img1.bdstatic.com/static/common/widget/ui/slider/slider_545c0c2.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js",
+                        "common:widget/ui/EventEmitter/EventEmitter.js"
+                    ]
+                },
+                "common:widget/ui/statistic/statistic.js": {
+                    "url": "//img2.bdstatic.com/static/common/widget/ui/statistic/statistic_09d1c4a.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js",
+                        "common:widget/ui/monitorRequest/monitorRequest.js",
+                        "common:widget/ui/base/events.js", "common:widget/ui/utils/utils.js"
+                    ]
+                },
+                "common:widget/ui/suggest/data.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/suggest/data_89dc815.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/utils/utils.js",
+                        "common:widget/ui/base/events.js"
+                    ]
+                },
+                "common:widget/ui/suggest/inputwatcher.js": {
+                    "url": "//img2.bdstatic.com/static/common/widget/ui/suggest/inputwatcher_2eb7c40.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js"]
+                },
+                "common:widget/ui/suggest/suggestionlist.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/suggest/suggestionlist_37c79c7.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js"]
+                },
+                "common:widget/ui/suggest/suggestion.js": {
+                    "url": "//img2.bdstatic.com/static/common/widget/ui/suggest/suggestion_1507f89.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/base/events.js",
+                        "common:widget/ui/suggest/data.js", "common:widget/ui/suggest/inputwatcher.js",
+                        "common:widget/ui/suggest/suggestionlist.js"
+                    ]
+                },
+                "common:widget/ui/sugHistory/sugHistory.js": {
+                    "url": "//img2.bdstatic.com/static/common/widget/ui/sugHistory/sugHistory_4277c60.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/statistic/statistic.js",
+                        "common:widget/ui/utils/utils.js"
+                    ]
+                },
+                "common:widget/ui/SugRec/SugRec.js": {
+                    "url": "//img2.bdstatic.com/static/common/widget/ui/SugRec/SugRec_3755387.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/statistic/statistic.js"]
+                },
+                "common:widget/ui/swf/swf.js": {
+                    "url": "//img1.bdstatic.com/static/common/widget/ui/swf/swf_b5294d0.js",
+                    "pkg": "common:p1"
+                },
+                "common:widget/ui/userInfo/userInfo.js": {
+                    "url": "//img1.bdstatic.com/static/common/widget/ui/userInfo/userInfo_4160d44.js",
+                    "pkg": "common:p1",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/searchUtils/searchUtils.js",
+                        "common:widget/ui/base/events.js", "common:widget/ui/utils/utils.js"
+                    ]
+                },
+                "common:widget/ui/feedback/feedback.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/ui/feedback/feedback_4002381.js",
+                    "pkg": "common:p1"
+                },
+                "common:widget/shitu/static/animate.js": {
+                    "url": "//img1.bdstatic.com/static/common/widget/shitu/static/animate_d5993fc.js",
+                    "deps": ["common:widget/ui/base/base.js"]
+                },
+                "common:widget/shitu/run.js": {
+                    "url": "//img0.bdstatic.com/static/common/widget/shitu/run_c4ee0ab.js",
+                    "deps": ["common:widget/ui/base/base.js", "common:widget/ui/utils/utils.js",
+                        "common:widget/shitu/static/animate.js"
+                    ]
+                },
+                "home:static/shitu/index.js": {
+                    "url": "//img1.bdstatic.com/static/home/shitu/index_ba03d37.js"
                 }
-                ,
-                "pkg": {
-                    "common:p1": {
-                        "url": "//img0.bdstatic.com/static/common/pkg/cores_b4aad57.js"
-                    }
+            },
+            "pkg": {
+                "common:p1": {
+                    "url": "//img0.bdstatic.com/static/common/pkg/cores_b4aad57.js"
                 }
             }
-        );
+        });
     </script>
-    
+
     <div class='shitu-wrapper'>
         <div class='shitu-upper'>
 
@@ -335,7 +303,8 @@
                             font-size: 35px;border:4px rgb(32, 134, 218) solid;margin-bottom: 5px;">
                                     Chose your file to upload </b></td>
                             <div style="clear: both;"></div>
-                            <form method=post enctype=multipart/form-data"> <input type="file" name="file" required onchange="show(this)"/>
+                            <form method=post enctype=multipart/form-data"> <input type="file" name="file" required
+                                onchange="show(this)" />
                             <input type=submit value="Search!" onclick="fun()">
                             </form>
                             <tr id="row1" style="display:none;">
@@ -352,33 +321,33 @@
                         </center>
 
                         <center>
-                                <td>
-                                    <b id="retrieval-result1" style="color: rgb(103, 32, 218);
+                            <td>
+                                <b id="retrieval-result1" style="color: rgb(103, 32, 218);
                                     font-size: 15px;display: none;">
-                                            本次共检索到 </b>
-                                            <b id="retrieval-result2" style="color: rgb(255, 0, 0);
+                                    本次共检索到 </b>
+                                <b id="retrieval-result2" style="color: rgb(255, 0, 0);
                                     font-size: 15px;display: none;">
-                                            &nbsp;8&nbsp; </b>
-                                            <b id="retrieval-result3" style="color: rgb(103, 32, 218);
+                                    &nbsp;8&nbsp; </b>
+                                <b id="retrieval-result3" style="color: rgb(103, 32, 218);
                                     font-size: 15px;display: none;">
-                                            张相似图片 </b>
-                                </td>
+                                    张相似图片 </b>
+                            </td>
                         </center>
-                        
-                        <div id="main" class="container">  
+
+                        <div id="main" class="container">
                             <div style="display: inline-block; margin-left: 20%;">
                                 <img id="source_img" src="" draggable="false" />
                             </div>
-                            
+
                             <div style="display: inline-block; margin-left: 10%;">
                                 <table id="table" class="table" style="display:none;">
                                     <tbody>
                                         <tr>
                                             <td class="table-td">
-                                                <img class="min" id="img0" src="" alt="Norway"/>
+                                                <img class="min" id="img0" src="" alt="Norway" />
                                             </td>
                                             <td class="table-td">
-                                                <img class="min" id="img1" src="" alt="Norway"/>
+                                                <img class="min" id="img1" src="" alt="Norway" />
                                             </td>
                                             <td class="table-td">
                                                 <img class="min" id="img2" src="" alt="Norway" />
@@ -387,9 +356,9 @@
                                                 <img class="min" id="img3" src="" alt="Norway" />
                                             </td>
                                         </tr>
-                        
+
                                         <tr>
-                                            
+
                                             <td class="table-td">
                                                 <img class="min" id="img4" src="" alt="Norway" />
                                             </td>
@@ -403,16 +372,19 @@
                                                 <img class="min" id="img7" src="" alt="Norway" />
                                             </td>
                                         </tr>
-                        
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                         <div style="margin-left: 70%;z-index: 9999; position: fixed ! important;
-                        right: 10%;top: 70%;">
-                            <img class="favorites" src="https://upload-images.jianshu.io/upload_images/12014150-8c29e9603105f48a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" id="favorites" 
-                            style="position: absolute;right: 0px; top: 0px;width: 140px; height: 130px;" draggable="false"/>
+                        right: 12%;top: 67%;">
+                            <img class="favorites"
+                                src="https://upload-images.jianshu.io/upload_images/12014150-dd7e1b70111fdaa9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
+                                id="favorites"
+                                style="position: absolute;right: 0px; top: 0px;width: 120px; height: 95px;"
+                                draggable="false" onclick="favoritesClick()"/>
                         </div>
 
                     </div>
@@ -420,78 +392,75 @@
             </div>
         </div>
     </div>
-    
+
     <script type="text/javascript">
         function myFunction() {
             document.getElementById("predictedResult").innerHTML = "";
             $('#clear').hide();
         }
+
         function fun() {
             $('#load').show();
             $("form").submit(function (evt) {
-                    //$('#loader-icon').show();
-                    evt.preventDefault();
-                    //$('#loader-icon').show();
-                    var formData = new FormData($(this)[0]);
-                    $.ajax({
-                            url: 'imgUpload',
-                            type: 'POST',
-                            data: formData,
-                            //async: false,
-                            cache: false,
-                            contentType: false,
-                            enctype: 'multipart/form-data',
-                            processData: false,
-                            success: function (response) {
-                                $('#load').hide();
-                                $('#row1').show();
-                                //$('#clear').show();
-                                //console.log(response[1]);
-                                //document.getElementById("predictedResult").innerHTML= response;
-                                document.getElementById("img0").src = response.image0;
-                                document.getElementById("img1").src = response.image1;
-                                document.getElementById("img2").src = response.image2;
-                                document.getElementById("img3").src = response.image3;
-                                document.getElementById("img4").src = response.image4;
-                                document.getElementById("img5").src = response.image5;
-                                document.getElementById("img6").src = response.image6;
-                                document.getElementById("img7").src = response.image7;
-                                //document.getElementById("img8").src = response.image8;
-                                $('#table').show();
-                                $('#clear').show();
+                //$('#loader-icon').show();
+                evt.preventDefault();
+                //$('#loader-icon').show();
+                var formData = new FormData($(this)[0]);
+                $.ajax({
+                    url: 'imgUpload',
+                    type: 'POST',
+                    data: formData,
+                    //async: false,
+                    cache: false,
+                    contentType: false,
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    success: function (response) {
+                        $('#load').hide();
+                        $('#row1').show();
+                        //$('#clear').show();
+                        //console.log(response[1]);
+                        //document.getElementById("predictedResult").innerHTML= response;
+                        document.getElementById("img0").src = response.image0;
+                        document.getElementById("img1").src = response.image1;
+                        document.getElementById("img2").src = response.image2;
+                        document.getElementById("img3").src = response.image3;
+                        document.getElementById("img4").src = response.image4;
+                        document.getElementById("img5").src = response.image5;
+                        document.getElementById("img6").src = response.image6;
+                        document.getElementById("img7").src = response.image7;
+                        //document.getElementById("img8").src = response.image8;
+                        $('#table').show();
+                        $('#clear').show();
 
-                                //显示检索结果
-                                $('#retrieval-result1').show();
-                                $('#retrieval-result2').show();
-                                $('#retrieval-result3').show();
-                            }
-                        }
-                    );
-                    return false;
-                }
-            )
-        }
-        ;
+                        //显示检索结果
+                        $('#retrieval-result1').show();
+                        $('#retrieval-result2').show();
+                        $('#retrieval-result3').show();
+                    }
+                });
+                return false;
+            })
+        };
     </script>
 
-<script>		
-    function show(file){	
-        var reader = new FileReader();	// 实例化一个FileReader对象，用于读取文件
-        var source_img = document.getElementById('source_img'); 	// 获取要显示图片的标签
-        
-        //读取File对象的数据
-        reader.onload = function(evt){
-            source_img.width  =  "180";
-            source_img.height =  "180";
-            source_img.src = evt.target.result;
+    <script>
+        function show(file) {
+            var reader = new FileReader(); // 实例化一个FileReader对象，用于读取文件
+            var source_img = document.getElementById('source_img'); // 获取要显示图片的标签
+
+            //读取File对象的数据
+            reader.onload = function (evt) {
+                source_img.width = "180";
+                source_img.height = "180";
+                source_img.src = evt.target.result;
+            }
+            reader.readAsDataURL(file.files[0]);
         }
-        reader.readAsDataURL(file.files[0]);
-    }	
-</script>
-
-
+    </script>
 
 </body>
+
 <script type="text/javascript" src="//img0.bdstatic.com/static/common/widget/ui/base/base_a66ce51.js"></script>
 <script type="text/javascript" src="//img1.bdstatic.com/static/home/widget/shitu/carousel/carousel_b51b2a8.js"></script>
 <script type="text/javascript">
@@ -499,30 +468,25 @@
         window.tn = 'shitu-index';
         window.vsid = "a4d652d612c306399706e6596e2e3eae7af7859c";
         require.async(["common:widget/ui/base/base", "common:widget/shitu/run"], function ($, shitu) {
-                $(document).ready(function () {
-                        var st = new shitu();
-                        st.init();
-                        window.stInstance = st;
-                    }
-                );
-            }
-        );
+            $(document).ready(function () {
+                var st = new shitu();
+                st.init();
+                window.stInstance = st;
+            });
+        });
     }
     ();
     ! function () {
         require.async(["common:widget/ui/base/base"], function (e) {
-                e.browser.msie || e(".shitu-img").each(function (e, t) {
-                        t.onselectstart = function () {
-                                return !1
-                            }
-                            , t.ondragstart = function (e) {
-                                return e.stopPropagation ? e.stopPropagation() : e.cancelBubble = !0, e
-                                    .dataTransfer.dropEffect = "move", e.dataTransfer.effectAllowed = "move", !0
-                            }
-                    }
-                )
-            }
-        );
+            e.browser.msie || e(".shitu-img").each(function (e, t) {
+                t.onselectstart = function () {
+                    return !1
+                }, t.ondragstart = function (e) {
+                    return e.stopPropagation ? e.stopPropagation() : e.cancelBubble = !0, e
+                        .dataTransfer.dropEffect = "move", e.dataTransfer.effectAllowed = "move", !0
+                }
+            })
+        });
     }
     ();
     ! function () {
@@ -538,40 +502,84 @@
 </script>
 
 <script type="text/javascript">
-    document.addEventListener("dragstart", function(event) { 
+const OPEN = 1;
+const CLOSED = 2;
+const STAR_OPEN = 3;
+const STAR_CLOSED = 4;
+
+var favorites_img = [];
+var favorites_flag = CLOSED;
+
+    document.addEventListener("dragstart", function (event) {
         console.log("start...")
-    //dataTransfer.setData()方法设置数据类型和拖动的数据 
-    event.dataTransfer.setData("Text", event.target.id); 
-    //修改拖动元素的透明度 
-    event.target.style.opacity = "0.4";
-});
-// 当拖完p元素输出一些文本元素和重置透明度 
-document.addEventListener("dragend", function(event) { 
-    event.target.style.opacity = "1"; 
-});
-// 当p元素完成拖动进入droptarget,改变div的边框样式 
-document.addEventListener("dragenter", function(event) { 
-    if ( event.target.className == "favorites" ) { 
-        console.log("ok...")
-    } 
-}); 
+        //dataTransfer.setData()方法设置数据类型和拖动的数据 
+        console.log(event.target.id)
+        event.dataTransfer.setData("Text", event.target.id);
+        //修改拖动元素的透明度 
+        event.target.style.opacity = "0.4";
+    });
+    // 当拖完p元素输出一些文本元素和重置透明度 
+    document.addEventListener("dragend", function (event) {
+        event.target.style.opacity = "1";
+    });
+    // 当p元素完成拖动进入droptarget,改变div的边框样式 
+    document.addEventListener("dragenter", function (event) {
+        if (event.target.className == "favorites") {
+            console.log("ok...")
+        }
+    });
 
-/*对于drop,防止浏览器的默认处理数据(在drop中链接是默认打开) 
-复位输出文本的颜色和DIV的边框颜色 
-利用dataTransfer.getData()方法获得拖放数据 
-拖拖的数据元素id("drag1") 
-拖拽元素附加到drop元素*/ 
-document.addEventListener("drop", function(event) { 
-    event.preventDefault(); 
-    if ( event.target.className == "favorites" ) { 
-        event.target.src="https://upload-images.jianshu.io/upload_images/12014150-b2517cab8331e7fc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
-    } 
-});
+    /*对于drop,防止浏览器的默认处理数据(在drop中链接是默认打开) 
+    复位输出文本的颜色和DIV的边框颜色 
+    利用dataTransfer.getData()方法获得拖放数据 
+    拖拖的数据元素id("drag1") 
+    拖拽元素附加到drop元素*/
+    document.addEventListener("drop", function (event) {
+        event.preventDefault();
+        if (event.target.className == "favorites") {
+            if(favorites_flag==OPEN){favorites_flag=STAR_OPEN;}
+            else if(favorites_flag==CLOSED){favorites_flag=STAR_CLOSED;}
+            //更换收藏夹图标
+            event.target.src =
+                    "https://upload-images.jianshu.io/upload_images/12014150-383ad52c8d75dfbb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
 
-// 默认情况下,数据/元素不能在其他元素中被拖放。对于drop我们必须防止元素的默认处理 
-document.addEventListener("dragover", function(event) { 
-    event.preventDefault(); 
-});
+                var data = event.dataTransfer.getData("Text");
+                favorites_img.push(data)
+        }
+    });
+
+    // 默认情况下,数据/元素不能在其他元素中被拖放。对于drop我们必须防止元素的默认处理 
+    document.addEventListener("dragover", function (event) {
+        event.preventDefault();
+    });
+
+    function favoritesClick(){
+        favoriateData =  document.getElementById("favorites");
+        if(favorites_flag==OPEN){
+            favorites_flag = CLOSED;
+            favoriateData.src="https://upload-images.jianshu.io/upload_images/12014150-dd7e1b70111fdaa9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
+        }
+        else if(favorites_flag==CLOSED){
+            favorites_flag = OPEN;
+            favoriateData.src="https://upload-images.jianshu.io/upload_images/12014150-1b0432d7f3f099a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
+        }
+        else if(favorites_flag==STAR_CLOSED){
+            favorites_flag = STAR_OPEN;
+            favoriateData.src="https://upload-images.jianshu.io/upload_images/12014150-1b0432d7f3f099a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
+            for(var i=0;i<=8;++i){
+                if(favorites_img.indexOf("img"+String(i))==-1){
+                    document.getElementById("img"+String(i)).style.visibility="hidden";
+                }
+            }
+        }
+        else if(favorites_flag==STAR_OPEN){
+            favorites_flag = STAR_CLOSED;
+            favoriateData.src="https://upload-images.jianshu.io/upload_images/12014150-383ad52c8d75dfbb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
+            for(var i=0;i<=8;++i){
+                document.getElementById("img"+String(i)).style.visibility="visible";
+            }
+        }
+    }
 </script>
 
 </html>
