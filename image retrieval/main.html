@@ -31,6 +31,18 @@
             transition: 0.3s;
             width: 80px;
             height: 80px;
+            position: relative;
+        }
+
+        .tagbtn {
+            background-color: rgba(7, 214, 221, 0.7);
+            position: absolute;
+            z-index: 10;
+            top: 75%;
+            left: 63%;
+            width: 30px;
+            height: 15px;
+            font-size: 5px;
         }
     </style>
     <script>
@@ -345,15 +357,19 @@
                                         <tr>
                                             <td class="table-td">
                                                 <img class="min" id="img0" src="" alt="Norway" />
+                                                <div class="tagbtn" id="tagbtn0"></div>
                                             </td>
                                             <td class="table-td">
                                                 <img class="min" id="img1" src="" alt="Norway" />
+                                                <div class="tagbtn" id="tagbtn1"></div>
                                             </td>
                                             <td class="table-td">
                                                 <img class="min" id="img2" src="" alt="Norway" />
+                                                <div class="tagbtn" id="tagbtn2"></div>
                                             </td>
                                             <td class="table-td">
                                                 <img class="min" id="img3" src="" alt="Norway" />
+                                                <div class="tagbtn" id="tagbtn3"></div>
                                             </td>
                                         </tr>
 
@@ -361,18 +377,30 @@
 
                                             <td class="table-td">
                                                 <img class="min" id="img4" src="" alt="Norway" />
+                                                <div class="tagbtn" id="tagbtn4"></div>
                                             </td>
                                             <td class="table-td">
                                                 <img class="min" id="img5" src="" alt="Norway" />
+                                                <div class="tagbtn" id="tagbtn5"></div>
                                             </td>
                                             <td class="table-td">
                                                 <img class="min" id="img6" src="" alt="Norway" />
+                                                <div class="tagbtn" id="tagbtn6"></div>
                                             </td>
                                             <td class="table-td">
                                                 <img class="min" id="img7" src="" alt="Norway" />
+                                                <div class="tagbtn" id="tagbtn7"></div>
                                             </td>
                                         </tr>
 
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div style="margin-left: 70%;z-index: 9999; position: fixed ! important;
+                            right: 12%;top: 40%;">
+                                <table id="tagtable" class="table" style="display:none;bottom: 30%;">
+                                    <tbody>
                                     </tbody>
                                 </table>
                             </div>
@@ -384,7 +412,7 @@
                                 src="https://upload-images.jianshu.io/upload_images/12014150-dd7e1b70111fdaa9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
                                 id="favorites"
                                 style="position: absolute;right: 0px; top: 0px;width: 120px; height: 95px;"
-                                draggable="false" onclick="favoritesClick()"/>
+                                draggable="false" onclick="favoritesClick()" />
                         </div>
 
                     </div>
@@ -394,6 +422,8 @@
     </div>
 
     <script type="text/javascript">
+         var tags = null;
+
         function myFunction() {
             document.getElementById("predictedResult").innerHTML = "";
             $('#clear').hide();
@@ -421,16 +451,56 @@
                         //$('#clear').show();
                         //console.log(response[1]);
                         //document.getElementById("predictedResult").innerHTML= response;
-                        document.getElementById("img0").src = response.image0;
-                        document.getElementById("img1").src = response.image1;
-                        document.getElementById("img2").src = response.image2;
-                        document.getElementById("img3").src = response.image3;
-                        document.getElementById("img4").src = response.image4;
-                        document.getElementById("img5").src = response.image5;
-                        document.getElementById("img6").src = response.image6;
-                        document.getElementById("img7").src = response.image7;
+                        document.getElementById("img0").src = response.image0[0];
+                        document.getElementById("img1").src = response.image1[0];
+                        document.getElementById("img2").src = response.image2[0];
+                        document.getElementById("img3").src = response.image3[0];
+                        document.getElementById("img4").src = response.image4[0];
+                        document.getElementById("img5").src = response.image5[0];
+                        document.getElementById("img6").src = response.image6[0];
+                        document.getElementById("img7").src = response.image7[0];
+
+                        document.getElementById("tagbtn0").append(response.image0[1])
+                        document.getElementById("tagbtn0").name=response.image0[1]
+                        document.getElementById("img0").name=response.image0[1]
+
+                        document.getElementById("tagbtn1").append(response.image1[1])
+                        document.getElementById("tagbtn1").name=response.image1[1]
+                        document.getElementById("img1").name=response.image1[1]
+
+                        document.getElementById("tagbtn2").append(response.image2[1])
+                        document.getElementById("tagbtn2").name=response.image2[1]
+                        document.getElementById("img2").name=response.image2[1]
+
+                        document.getElementById("tagbtn3").append(response.image3[1])
+                        document.getElementById("tagbtn3").name=response.image3[1]
+                        document.getElementById("img3").name=response.image3[1]
+
+                        document.getElementById("tagbtn4").append(response.image4[1])
+                        document.getElementById("tagbtn4").name=response.image4[1]
+                        document.getElementById("img4").name=response.image4[1]
+
+                        document.getElementById("tagbtn5").append(response.image5[1])
+                        document.getElementById("tagbtn5").name=response.image5[1]
+                        document.getElementById("img5").name=response.image5[1]
+
+                        document.getElementById("tagbtn6").append(response.image6[1])
+                        document.getElementById("tagbtn6").name=response.image6[1]
+                        document.getElementById("img6").name=response.image6[1]
+
+                        document.getElementById("tagbtn7").append(response.image7[1])
+                        document.getElementById("tagbtn7").name=response.image7[1]
+                        document.getElementById("img7").name=response.image7[1]
+
+                        tags = response.tags
+                        console.log(tags)
+                        for (var i = 0; i < tags.length; ++i) {
+                            addrow(tags[i])
+                        }
+
                         //document.getElementById("img8").src = response.image8;
                         $('#table').show();
+                        $('#tagtable').show();
                         $('#clear').show();
 
                         //显示检索结果
@@ -502,13 +572,13 @@
 </script>
 
 <script type="text/javascript">
-const OPEN = 1;
-const CLOSED = 2;
-const STAR_OPEN = 3;
-const STAR_CLOSED = 4;
+    const OPEN = 1;
+    const CLOSED = 2;
+    const STAR_OPEN = 3;
+    const STAR_CLOSED = 4;
 
-var favorites_img = [];
-var favorites_flag = CLOSED;
+    var favorites_img = [];
+    var favorites_flag = CLOSED;
 
     document.addEventListener("dragstart", function (event) {
         console.log("start...")
@@ -537,14 +607,17 @@ var favorites_flag = CLOSED;
     document.addEventListener("drop", function (event) {
         event.preventDefault();
         if (event.target.className == "favorites") {
-            if(favorites_flag==OPEN){favorites_flag=STAR_OPEN;}
-            else if(favorites_flag==CLOSED){favorites_flag=STAR_CLOSED;}
+            if (favorites_flag == OPEN) {
+                favorites_flag = STAR_OPEN;
+            } else if (favorites_flag == CLOSED) {
+                favorites_flag = STAR_CLOSED;
+            }
             //更换收藏夹图标
             event.target.src =
-                    "https://upload-images.jianshu.io/upload_images/12014150-383ad52c8d75dfbb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
+                "https://upload-images.jianshu.io/upload_images/12014150-383ad52c8d75dfbb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
 
-                var data = event.dataTransfer.getData("Text");
-                favorites_img.push(data)
+            var data = event.dataTransfer.getData("Text");
+            favorites_img.push(data)
         }
     });
 
@@ -553,30 +626,70 @@ var favorites_flag = CLOSED;
         event.preventDefault();
     });
 
-    function favoritesClick(){
-        favoriateData =  document.getElementById("favorites");
-        if(favorites_flag==OPEN){
+    function favoritesClick() {
+        favoriateData = document.getElementById("favorites");
+        if (favorites_flag == OPEN) {
             favorites_flag = CLOSED;
-            favoriateData.src="https://upload-images.jianshu.io/upload_images/12014150-dd7e1b70111fdaa9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
-        }
-        else if(favorites_flag==CLOSED){
+            favoriateData.src =
+                "https://upload-images.jianshu.io/upload_images/12014150-dd7e1b70111fdaa9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
+        } else if (favorites_flag == CLOSED) {
             favorites_flag = OPEN;
-            favoriateData.src="https://upload-images.jianshu.io/upload_images/12014150-1b0432d7f3f099a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
-        }
-        else if(favorites_flag==STAR_CLOSED){
+            favoriateData.src =
+                "https://upload-images.jianshu.io/upload_images/12014150-1b0432d7f3f099a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
+        } else if (favorites_flag == STAR_CLOSED) {
             favorites_flag = STAR_OPEN;
-            favoriateData.src="https://upload-images.jianshu.io/upload_images/12014150-1b0432d7f3f099a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
-            for(var i=0;i<=8;++i){
-                if(favorites_img.indexOf("img"+String(i))==-1){
-                    document.getElementById("img"+String(i)).style.visibility="hidden";
+            favoriateData.src =
+                "https://upload-images.jianshu.io/upload_images/12014150-1b0432d7f3f099a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
+            for (var i = 0; i <= 8; ++i) {
+                if (favorites_img.indexOf("img" + String(i)) == -1) {
+                    document.getElementById("img" + String(i)).style.visibility = "hidden";
+                    document.getElementById("tagbtn" + String(i)).style.visibility = "hidden";
                 }
             }
-        }
-        else if(favorites_flag==STAR_OPEN){
+        } else if (favorites_flag == STAR_OPEN) {
             favorites_flag = STAR_CLOSED;
-            favoriateData.src="https://upload-images.jianshu.io/upload_images/12014150-383ad52c8d75dfbb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
-            for(var i=0;i<=8;++i){
-                document.getElementById("img"+String(i)).style.visibility="visible";
+            favoriateData.src =
+                "https://upload-images.jianshu.io/upload_images/12014150-383ad52c8d75dfbb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
+            for (var i = 0; i <= 8; ++i) {
+                document.getElementById("img" + String(i)).style.visibility = "visible";
+                document.getElementById("tagbtn" + String(i)).style.visibility = "visible";
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    function addrow(name) {
+        var c = document.getElementById('tagtable'); //获得表格的信息
+        if (c.rows.length == 0) { //如果是向一个空表增加一行
+            var x = c.insertRow(0); //向空表插入一行
+            var y = x.insertCell(0); //向新行插入一列
+            y.innerHTML+="<button id=\""+name+"\" style=\"background-color: rgba(7, 214, 221);\" onclick=\"tagClick(this)\">"+name+"</button>"
+        } else {
+            var z = c.rows[0].cells; //如果不是空表，首先获得表格有多少列，先获取再插入新行
+            var x = c.insertRow(0);
+            for (var i = 0; i < z.length; i++) { //依次向新行插入表格列数的单元格
+                var y = x.insertCell(i);
+                y.innerHTML+="<button id=\""+name+"\" style=\"background-color: rgba(7, 214, 221);\" onclick=\"tagClick(this)\">"+name+"</button>"
+
+            }
+        }
+    }
+
+    function tagClick(e){
+        console.log(e.id)
+        visible_obj = document.getElementsByName(String(e.id));
+        for(var i=0;i<visible_obj.length;++i){
+            visible_obj[i].style.visibility="visible";
+        }
+
+        for (var i=0;i<tags.length;++i){
+            if(tags[i]!=e.id){
+                hidden_obj = document.getElementsByName(String(tags[i]));
+                for(var i=0;i<hidden_obj.length;++i){
+                    hidden_obj[i].style.visibility = "hidden";
+
+                }
             }
         }
     }
