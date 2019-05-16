@@ -3,7 +3,7 @@
 
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-    <title>同济识图, "鉴"你所见</title>
+    <title>IMAGE SEARCH</title>
     <script type="text/javascript" src="//img0.bdstatic.com/static/home/shitu/mod_6f6741d.js"></script>
     <link rel="stylesheet" type="text/css" href="//img0.bdstatic.com/static/home/shitu/reset_3f5059c.css" />
     <link rel="stylesheet" type="text/css" href="//img1.bdstatic.com/static/home/pkg/stu_3c9d544.css" />
@@ -37,13 +37,13 @@
         .tagbtn {
             background-color: rgba(7, 214, 221, 0.7);
             position: absolute;
-            z-index: 10;
+            /* z-index: 10; */
             top: 75%;
             left: 59%;
             width: 34px;
             height: 15px;
             text-align：center;
-            line-height:15px;   
+            line-height: 15px;
             font-size: 5px;
         }
     </style>
@@ -301,7 +301,7 @@
             <div class="shitu-logo">
                 <div class="up"></div>
                 <div class="content">
-                    <p class="main-title"><span class="front">同济识图</span><span classs="rear">鉴你所见</span></p>
+                    <p class="main-title"><span class="front">IMAGE</span><span classs="rear">SEARCH</span></p>
                     <p class="sub-title">丛林中的生命密码，你读懂了多少</p><a href="javascript: void(0);" class="shitu-btn">识图一下</a>
                 </div>
             </div>
@@ -425,6 +425,7 @@
 
     <script type="text/javascript">
         var tags = new Array();
+        var color_list = new Array();
 
         function myFunction() {
             document.getElementById("predictedResult").innerHTML = "";
@@ -458,7 +459,9 @@
                         tags = response.tags
                         console.log(tags)
                         for (var i = 0; i < tags.length; ++i) {
-                            addrow(tags[i])
+                            var color = randomHexColor()
+                            color_list.push(color)
+                            addrow(tags[i], color)
                         }
 
                         document.getElementById("img0").src = response.image0[0];
@@ -471,38 +474,38 @@
                         document.getElementById("img7").src = response.image7[0];
 
                         document.getElementById("tagbtn0").append(response.image0[1])
-                        document.getElementById("tagbtn0").name=response.image0[1]
-                        document.getElementById("img0").name=response.image0[1]
+                        document.getElementById("tagbtn0").style.backgroundColor = String(color_list[tags.indexOf(response.image0[1])])
+                        document.getElementById("img0").name = response.image0[1]
 
                         document.getElementById("tagbtn1").append(response.image1[1])
-                        document.getElementById("tagbtn1").name=response.image1[1]
-                        document.getElementById("img1").name=response.image1[1]
+                        document.getElementById("tagbtn1").style.backgroundColor = String(color_list[tags.indexOf(response.image1[1])])
+                        document.getElementById("img1").name = response.image1[1]
 
                         document.getElementById("tagbtn2").append(response.image2[1])
-                        document.getElementById("tagbtn2").name=response.image2[1]
-                        document.getElementById("img2").name=response.image2[1]
+                        document.getElementById("tagbtn2").style.backgroundColor = String(color_list[tags.indexOf(response.image2[1])])
+                        document.getElementById("img2").name = response.image2[1]
 
                         document.getElementById("tagbtn3").append(response.image3[1])
-                        document.getElementById("tagbtn3").name=response.image3[1]
-                        document.getElementById("img3").name=response.image3[1]
+                        document.getElementById("tagbtn3").style.backgroundColor = String(color_list[tags.indexOf(response.image3[1])])
+                        document.getElementById("img3").name = response.image3[1]
 
                         document.getElementById("tagbtn4").append(response.image4[1])
-                        document.getElementById("tagbtn4").name=response.image4[1]
-                        document.getElementById("img4").name=response.image4[1]
+                        document.getElementById("tagbtn4").style.backgroundColor = String(color_list[tags.indexOf(response.image4[1])])
+                        document.getElementById("img4").name = response.image4[1]
 
                         document.getElementById("tagbtn5").append(response.image5[1])
-                        document.getElementById("tagbtn5").name=response.image5[1]
-                        document.getElementById("img5").name=response.image5[1]
+                        document.getElementById("tagbtn5").style.backgroundColor = String(color_list[tags.indexOf(response.image5[1])])
+                        document.getElementById("img5").name = response.image5[1]
 
                         document.getElementById("tagbtn6").append(response.image6[1])
-                        document.getElementById("tagbtn6").name=response.image6[1]
-                        document.getElementById("img6").name=response.image6[1]
+                        document.getElementById("tagbtn6").style.backgroundColor = String(color_list[tags.indexOf(response.image6[1])])
+                        document.getElementById("img6").name = response.image6[1]
 
                         document.getElementById("tagbtn7").append(response.image7[1])
-                        document.getElementById("tagbtn7").name=response.image7[1]
-                        document.getElementById("img7").name=response.image7[1]
-                        
-                        
+                        document.getElementById("tagbtn7").style.backgroundColor = String(color_list[tags.indexOf(response.image7[1])])
+                        document.getElementById("img7").name = response.image7[1]
+
+
 
                         //document.getElementById("img8").src = response.image8;
                         $('#table').show();
@@ -646,17 +649,19 @@
             favorites_flag = STAR_OPEN;
             favoriateData.src =
                 "https://upload-images.jianshu.io/upload_images/12014150-1b0432d7f3f099a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
-            for (var i = 0; i <= 8; ++i) {
+            for (var i = 0; i < 8; ++i) {
                 if (favorites_img.indexOf("img" + String(i)) == -1) {
                     document.getElementById("img" + String(i)).style.visibility = "hidden";
                     document.getElementById("tagbtn" + String(i)).style.visibility = "hidden";
+                } else {
+                    document.getElementById("img" + String(i)).style.visibility = "visible";
                 }
             }
         } else if (favorites_flag == STAR_OPEN) {
             favorites_flag = STAR_CLOSED;
             favoriateData.src =
                 "https://upload-images.jianshu.io/upload_images/12014150-383ad52c8d75dfbb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240";
-            for (var i = 0; i <= 8; ++i) {
+            for (var i = 0; i < 8; ++i) {
                 document.getElementById("img" + String(i)).style.visibility = "visible";
                 document.getElementById("tagbtn" + String(i)).style.visibility = "visible";
             }
@@ -665,48 +670,61 @@
 </script>
 
 <script type="text/javascript">
-    function addrow(name) {
-        console.log("name is "+name)
+    function randomHexColor() { //随机生成十六进制颜色
+        var hex = Math.floor(Math.random() * 16777216).toString(16); //生成ffffff以内16进制数
+        while (hex.length < 6) { //while循环判断hex位数，少于6位前面加0凑够6位
+            hex = '0' + hex;
+        }
+        return '#' + hex; //返回‘#'开头16进制颜色
+    }
+
+    function addrow(name, color) {
+        console.log("name is " + name)
         var c = document.getElementById('tagtable'); //获得表格的信息
         if (c.rows.length == 0) { //如果是向一个空表增加一行
             var x = c.insertRow(0); //向空表插入一行
             var y = x.insertCell(0); //向新行插入一列
-            y.innerHTML+="<button id=\""+name+"\" style=\"background-color: rgba(7, 214, 221);\" onclick=\"tagClick(this)\">"+name+"</button>"
+            y.innerHTML += "<button id=\"" + name +
+                "\" style=\"background-color:" + color+";\" onclick=\"tagClick(this)\">" + name + "</button>"
         } else {
             var z = c.rows[0].cells; //如果不是空表，首先获得表格有多少列，先获取再插入新行
             var x = c.insertRow(0);
             for (var i = 0; i < z.length; i++) { //依次向新行插入表格列数的单元格
                 var y = x.insertCell(i);
-                y.innerHTML+="<button id=\""+name+"\" style=\"background-color: rgba(7, 214, 221);\" onclick=\"tagClick(this)\">"+name+"</button>"
-
+                y.innerHTML += "<button id=\"" + name +
+                "\" style=\"background-color:" + color+";\" onclick=\"tagClick(this)\">" + name + "</button>"
             }
         }
     }
 
-    function tagClick(e){
+    function tagClick(e) {
         console.log(tags)
-        console.log("点击的是"+e.id)
-        visible_obj = document.getElementsByName(e.id);
-
-        //显示对应的图片
-        for(var i=0;i<visible_obj.length;i++){
-            visible_obj[i].style.visibility="visible";
-        }
-        //显示对应的图片标签
-
+        console.log("点击的是" + e.id)
 
         //隐藏对应的图片
-        for (var i=0;i<tags.length;i++){
-            if(tags[i]!=e.id){
-                hidden_obj = document.getElementsByName(tags[i]);
-                console.log(hidden_obj)
-                for(var j=0;j<hidden_obj.length;j++){
-                    hidden_obj[j].style.visibility = "hidden";
-                }
+
+        //隐藏对应的图片标签
+        for (var i = 0; i < 8; ++i) {
+            if (document.getElementById("img" + String(i)).name != e.id) {
+                document.getElementById("img" + String(i)).style.visibility = "hidden";
+                document.getElementById("tagbtn" + String(i)).style.visibility = "hidden";
             }
         }
-        //隐藏对应的图片标签
-        
+
+        //显示对应的图片
+        // for (var i = 0; i < visible_obj.length; i++) {
+        //     visible_obj[i].style.visibility = "visible";
+        // }
+        //显示对应的图片标签
+        for (var i = 0; i < 8; ++i) {
+            if (document.getElementById("img" + String(i)).name == e.id) {
+                document.getElementById("img" + String(i)).style.visibility = "visible"
+                document.getElementById("tagbtn" + String(i)).style.visibility = "visible";
+            }
+        }
+
+
+
     }
 </script>
 
