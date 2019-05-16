@@ -25,7 +25,7 @@ Make use of deep learning to do state-of-the-art image similarity search.
   - [Tags & Classify](#Tags & Classify)
   - [Favorites](#Favorites)
   - [Enlarge & shrink of the images](#Enlarge & shrink of the images)
-- [Author](#Author)
+- [About the author](#About the author)
 
 <a name="Background"></a>  
 
@@ -76,6 +76,7 @@ It mainly includes three aspects:
   1. flask (Flask, jsonify)
   2. flask_httpauth (HTTPBasicAuth)
   3. tensorflow
+  4.  numpy
 
 - **Others:**
 
@@ -623,9 +624,9 @@ A slide is showed in the homepage (powered by **third-party library  - Baidu**)
 
      
 
-<a name="Author"></a>  
+<a name="About the author"></a>  
 
-## Author
+## About the author
 
 ​	**ID**			1754060
 
