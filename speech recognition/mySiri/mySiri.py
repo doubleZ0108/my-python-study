@@ -4,6 +4,7 @@ from PyQt5.QtGui import QIcon
 import speech_recognition as sr
 
 from mySiriInterface import *
+from playsound import playsound
 
 r = sr.Recognizer()
 
@@ -16,9 +17,13 @@ class mywindow(QtWidgets.QMainWindow,Ui_MainWindow):
         super(mywindow,self).__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon('Resources/icon/siri.png'))
+        self.isWaking = False
 
     # 语音识别函数
     def siri_recognition(self):
+
+        if self.isWaking==True:
+            return
 
         # 在定时器执行函数内部重复构造定时器
         global timer
@@ -88,11 +93,16 @@ class mywindow(QtWidgets.QMainWindow,Ui_MainWindow):
 
     def RecognitionFailed(self):
         self.label_9.setVisible(True)
+        playsound('Resources\\record\\can-not-hear-clearly.mp3')
         time.sleep(2)
         self.label_9.setVisible(False)
 
     def WakeSuccess(self):
+        if self.isWaking==True:
+            return
+
         print("wake success!")
+        self.isWaking = True
 
         global timer
         timer.cancel()
@@ -100,6 +110,7 @@ class mywindow(QtWidgets.QMainWindow,Ui_MainWindow):
         self.label_8.setVisible(False)
         self.label_10.setVisible(True)
         self.label_11.setVisible(True)
+        playsound('Resources\\record\\Kerr-is-here.mp3')
 
         mic = sr.Microphone()
         with mic as source:
@@ -125,6 +136,7 @@ class mywindow(QtWidgets.QMainWindow,Ui_MainWindow):
                 print("I guess you want to...")
                 max_index = random.randint(0, 2)
                 self.label_12.setVisible(True)
+                playsound('Resources\\record\\I-guess-you-want-to.mp3')
                 time.sleep(3)
                 self.label_12.setVisible(False)
 
@@ -145,6 +157,7 @@ class mywindow(QtWidgets.QMainWindow,Ui_MainWindow):
         self.label_11.setVisible(False)
         timer = threading.Timer(0.1, self.siri_recognition)
         timer.start()
+        self.isWaking = False
 
     def WakeFailed(self):
         print("wake failed!")
