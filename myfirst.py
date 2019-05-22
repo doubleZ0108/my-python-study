@@ -119,9 +119,8 @@ y = f(2)
 print(y)
 
 
-import math
 import getpass
-'''
+
 # 输入提示信息
 a = int(input('a = '))
 str = str(input('str = '))
@@ -155,6 +154,52 @@ print(sum)
 range(101)		产生0到100的整数序列
 range(1, 100)	产生1到99的整数序列
 '''
+
+
+import math
+
+#可变参数函数
+def add(*args):
+	total = 0
+	for i in args:
+		total += i
+	
+	return total
+	
+print(add())
+print(add(1))
+print(add(1,2,3,4,5,6,7,8,9))
+
+
+
+#判断一个数是否为回文数
+def isPalindrome(num):
+	temp = num
+	total = 0
+	while temp>0:
+		total = total*10 + temp%10
+		temp //= 10
+	return total == num
+	
+#判断一个数是否为素数
+def isPrime(num):
+	for factor in range(2, math.sqrt(num)):
+		if num%factor == 0:
+			return False
+	
+	return True if num!=1 else False
+	
+
+# if __name__ == '__main__':
+# 后面的代码也算是全局作用域
+
+#标准的程序结构
+def main():
+	# add your code here
+	pass 			#pass为空语句
+	
+if __name__ == '__main__':
+	main()
 
 
 
