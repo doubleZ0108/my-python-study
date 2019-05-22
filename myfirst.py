@@ -117,3 +117,44 @@ def f(x):
 	
 y = f(2)
 print(y)
+
+
+import math
+import getpass
+'''
+# 输入提示信息
+a = int(input('a = '))
+str = str(input('str = '))
+
+
+# 格式化输出
+a = 2
+b = 3
+print("%d // %d = %d" % (a,b,a//b))	#整除
+print("%d ** %d = %d" % (a,b,a**b))	#指数运算
+
+
+print(math.pi)
+
+
+username = input('请输入用户名：')
+password = getpass.getpass('请输入口令：')	 #终端中没有回显
+
+
+## 循环
+# 如果明确的知道循环执行的次数或者是对一个容器进行迭代 =》 for-in
+# 1～100求和
+sum = 0
+for i in range(101):
+	sum += i
+print(sum)
+
+
+
+'''
+range(101)		产生0到100的整数序列
+range(1, 100)	产生1到99的整数序列
+'''
+
+
+
