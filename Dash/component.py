@@ -55,3 +55,10 @@ dcc.Slider(
     marks={i: 'Label {}'.format(i) if i == 1 else str(i) for i in range(1, 6)},
     value=5,
 ),
+# 范围滑动条
+dcc.RangeSlider(
+    marks={i: 'Label {}'.format(i) for i in range(-5, 7)},
+    min=-5,
+    max=6,
+    value=[-3, 4]
+)
