@@ -3,7 +3,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 import numpy as np
-
 import plotly.graph_objs as go
 import dash_daq as daq
 
@@ -75,27 +74,13 @@ app.layout = html.Div([
                                     [
                                         dcc.Graph(
                                             id='size-graph',
-                                            figure={
-                                                'layout':
-                                                go.Layout(margin={
-                                                    'l': 40,
-                                                    'b': 40,
-                                                    't': 10,
-                                                    'r': 10
-                                                },
-                                                          legend={
-                                                              'x': 0,
-                                                              'y': 1
-                                                          },
-                                                          height=280,
-                                                          hovermode='closest')
-                                            }),
+                                            animate=True),
                                         dcc.Graph(id='content-rating-graph',
                                                   animate=True)
                                     ],
                                     style={
                                         'display': 'inline-block',
-                                        'width': '90%',
+                                        'width': '97%',
                                         'height': '20%',
                                         'padding': '0 0 0 0'
                                     })
@@ -225,13 +210,6 @@ def update_maingraph(catagory_name, price_choice):
     }
 
 
-# # size柱形图 callback
-# @app.callback(
-#     dash.dependencies.Output('size-graph', 'figure'),
-#     [dash.dependencies.Input('catagory', 'value'),
-#     dash.dependencies.Input('price', 'value')])
-# def update_sizegraph(catagory_name, price_choice):
-#     dff = filter(catagory_name, price_choice)
 
 
 # content rating饼状图 callback
@@ -243,30 +221,23 @@ def update_sizegraph(catagory_name, price_choice):
 
     dff = filter(catagory_name, price_choice)
 
-    tmp = dff.groupby('Content Rating').size().to_frame()
-    tmp = tmp.rename(columns={0: 'num'})
-    tmp = np.round(tmp, 6).reset_index(drop=False)
-
+    df_types = pd.DataFrame(dff['Content Rating'].value_counts(sort=False))
+    trace = go.Pie(
+        labels=df_types.index,
+        values=df_types['Content Rating'],
+    )
 
     return {
-        'data': [
-            dict(
-                type='pie',
-                name='Pie',
-                labels=tmp['Content Rating'].tolist(),
-                values=tmp['num'].tolist(),
-            )
-        ],
+        'data': [trace],
         'layout':
-        go.Layout(
-                  margin={
-                      'l': 130,
-                      'b': 30,
-                      't': 0,
-                      'r': 0
-                  },
-                  height=300,
-                  hovermode='closest')
+        go.Layout(margin={
+            'l': 130,
+            'b': 30,
+            't': 50,
+            'r': 0
+        },
+        height=300,
+        hovermode='closest')
     }
 
 
