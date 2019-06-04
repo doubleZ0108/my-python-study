@@ -72,9 +72,8 @@ app.layout = html.Div([
                             children=[
                                 html.Div(
                                     [
-                                        dcc.Graph(
-                                            id='size-graph',
-                                            animate=True),
+                                        dcc.Graph(id='size-graph',
+                                                  animate=True),
                                         dcc.Graph(id='content-rating-graph',
                                                   animate=True)
                                     ],
@@ -210,6 +209,43 @@ def update_maingraph(catagory_name, price_choice):
     }
 
 
+# size柱形图 callback
+@app.callback(dash.dependencies.Output('size-graph', 'figure'), [
+    dash.dependencies.Input('catagory', 'value'),
+    dash.dependencies.Input('price', 'value')
+])
+def update_sizegraph(catagory_name, price_choice):
+    dff = filter(catagory_name, price_choice)
+
+    trace = go.Bar(
+        x=[
+            '0~300K', '300K~600K', '600K~900K', '900K~25M', '25M~50M',
+            '50M~75M', '75M~100M'
+        ],
+        y=[2, 5, 3, 7, 3, 8, 4],
+        text=[
+            '0~300K', '300K~600K', '600K~900K', '900K~25M', '25M~50M',
+            '50M~75M', '75M~100M'
+        ],
+        textposition='auto',
+    )
+
+    return {
+        'data': [trace],
+        'layout':
+        go.Layout(margin={
+            'l': 40,
+            'b': 50,
+            't': 10,
+            'r': 20
+        },
+                  legend={
+                      'x': 0,
+                      'y': 1
+                  },
+                  height=280,
+                  hovermode='closest')
+    }
 
 
 # content rating饼状图 callback
@@ -236,8 +272,8 @@ def update_sizegraph(catagory_name, price_choice):
             't': 50,
             'r': 0
         },
-        height=300,
-        hovermode='closest')
+                  height=300,
+                  hovermode='closest')
     }
 
 
