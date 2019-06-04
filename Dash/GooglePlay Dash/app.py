@@ -2,100 +2,280 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
-import plotly.graph_objs as go
+import numpy as np
 
-from dash.dependencies import Input, Output
+import plotly.graph_objs as go
+import dash_daq as daq
+
+from dash.dependencies import Input, Output, State
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-colors = {
-    'background': '#111111',
-    'text': '#7FDBFF'
+# tab标签的css
+tabs_styles = {'height': '44px'}
+tab_style = {
+    'borderBottom': '1px solid #d6d6d6',
+    'padding': '6px',
+    'fontWeight': 'bold'
 }
 
-df = pd.read_csv(
-    'https://gist.githubusercontent.com/chriddyp/'
-    'cb5392c35661370d95f300086accea51/raw/'
-    '8e0768211f6b747c0db42a9ce9a0937dafcbd8b2/'
-    'indicators.csv')
+tab_selected_style = {
+    'borderTop': '1px solid #d6d6d6',
+    'borderBottom': '1px solid #d6d6d6',
+    'backgroundColor': '#119DFF',
+    'color': 'white',
+    'padding': '6px'
+}
 
-available_indicators = df['Indicator Name'].unique()
+df = pd.read_csv('dataset\google-play-store-apps\googleplaystore.csv')
+
+available_indicators = df['Category'].unique()
 
 app.layout = html.Div([
-    html.Div([
+    # 仪表盘的callback显示
+    html.Div(id='knob-output'),
+    html.Div(
+        [
+            html.Div(
+                [
+                    # Catagory下拉框
+                    dcc.Dropdown(id='catagory',
+                                 options=[{
+                                     'label': i,
+                                     'value': i
+                                 } for i in available_indicators],
+                                 value='ART_AND_DESIGN'),
+                    # Price单选按钮
+                    dcc.RadioItems(id='price',
+                                   options=[{
+                                       'label': i,
+                                       'value': i
+                                   } for i in ['Free', 'Paid', 'All']],
+                                   value='All',
+                                   labelStyle={'display': 'inline-block'})
+                ],
+                style={
+                    'width': '49%',
+                    'display': 'inline-block'
+                }),
 
-        html.Div([
-            dcc.Dropdown(
-                id='crossfilter-xaxis-column',
-                options=[{'label': i, 'value': i} for i in available_indicators],
-                value='Fertility rate, total (births per woman)'
-            ),
-            dcc.RadioItems(
-                id='crossfilter-xaxis-type',
-                options=[{'label': i, 'value': i} for i in ['Linear', 'Log']],
-                value='Linear',
-                labelStyle={'display': 'inline-block'}
-            )
+            # tab -> 可以切换两个视图
+            html.Div([
+                dcc.Tabs(
+                    id="tabs",
+                    children=[
+                        dcc.Tab(
+                            label='Size & Content Rating',
+                            style=tab_style,
+                            selected_style=tab_selected_style,
+                            children=[
+                                html.Div(
+                                    [
+                                        dcc.Graph(
+                                            id='size-graph',
+                                            figure={
+                                                'layout':
+                                                go.Layout(margin={
+                                                    'l': 40,
+                                                    'b': 40,
+                                                    't': 10,
+                                                    'r': 10
+                                                },
+                                                          legend={
+                                                              'x': 0,
+                                                              'y': 1
+                                                          },
+                                                          height=280,
+                                                          hovermode='closest')
+                                            }),
+                                        dcc.Graph(id='content-rating-graph',
+                                                  animate=True)
+                                    ],
+                                    style={
+                                        'display': 'inline-block',
+                                        'width': '90%',
+                                        'height': '20%',
+                                        'padding': '0 0 0 0'
+                                    })
+                            ]),
+                        dcc.Tab(
+                            label='Price & Rating',
+                            style=tab_style,
+                            selected_style=tab_selected_style,
+                            children=[
+                                html.Div(
+                                    [
+                                        dcc.Graph(
+                                            id='price-graph',
+                                            figure={
+                                                'layout':
+                                                go.Layout(margin={
+                                                    'l': 40,
+                                                    'b': 40,
+                                                    't': 10,
+                                                    'r': 10
+                                                },
+                                                          legend={
+                                                              'x': 0,
+                                                              'y': 1
+                                                          },
+                                                          height=280,
+                                                          hovermode='closest')
+                                            }),
+                                        daq.Knob(id='my-knob',
+                                                 label="Rating",
+                                                 value=5,
+                                                 max=5,
+                                                 scale={
+                                                     'start': 0,
+                                                     'labelInterval': 1,
+                                                     'interval': 1
+                                                 })
+                                    ],
+                                    style={
+                                        'display': 'inline-block',
+                                        'width': '90%',
+                                        'height': '20%',
+                                        'padding': '0 0 0 0'
+                                    })
+                            ]),
+                    ],
+                    style=tabs_styles),
+            ],
+                     style={
+                         'width': '49%',
+                         'float': 'right',
+                         'display': 'inline-block'
+                     })
         ],
-            style={'width': '49%', 'display': 'inline-block'}),
-
-        html.Div([
-            dcc.Tabs(id="tabs", value='tab-1', children=[
-                dcc.Tab(label='Tab one', value='tab-1'),
-                dcc.Tab(label='Tab two', value='tab-2'),
-            ]),
-            html.Div(id='tabs-content')
-        ], style={'width': '49%', 'float': 'right', 'display': 'inline-block'})
-    ], style={
-        'borderBottom': 'thin lightgrey solid',
-        'backgroundColor': 'rgb(250, 250, 250)',
-        'padding': '10px 5px'
-    }),
-
+        style={
+            'borderBottom': 'thin lightgrey solid',
+            'backgroundColor': 'rgb(250, 250, 250)',
+            'padding': '10px 5px'
+        }),
+    html.Div([dcc.Graph(id='main-graph', animate=True)],
+             style={
+                 'width': '49%',
+                 'display': 'inline-block',
+                 'padding': '0 20'
+             }),
 ])
 
 
-@app.callback(Output('tabs-content', 'children'),
-              [Input('tabs', 'value')])
-def render_content(tab):
-    if tab == 'tab-1':
-        return dcc.Graph(
-            id='example-graph',
-            figure={
-                'data': [
-                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-                    {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
-                ],
-                'layout': {
-                    'title': 'Dash Data Visualization'
-                }
-            }
-        )
-    elif tab == 'tab-2':
-        return [html.Div(children='Dash: A web application framework for Python.', style={
-            'textAlign': 'center',
-            'color': colors['text']
-        }),
+# 筛选数据
+def filter(catagory_name, price_choice):
+    # 按照是否付费筛选数据
+    if price_choice == "Free":
+        df_ = df[df['Price'] == "0"]
+    elif price_choice == "Paid":
+        df_ = df[df['Price'] != "0"]
+    else:
+        df_ = df
 
-                dcc.Graph(
-                    id='example-graph-2',
-                    figure={
-                        'data': [
-                            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-                            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
-                        ],
-                        'layout': {
-                            'plot_bgcolor': colors['background'],
-                            'paper_bgcolor': colors['background'],
-                            'font': {
-                                'color': colors['text']
-                            }
-                        }
+    # 按照分类筛选数据
+    dff = df_[df_['Category'] == catagory_name]
+
+    return dff
+
+
+# 主点状图 callback
+@app.callback(
+    dash.dependencies.Output('main-graph', 'figure'),
+    [
+        dash.dependencies.Input('catagory', 'value'),  # 输入1 -> 软件分类
+        dash.dependencies.Input('price', 'value')
+    ])  # 输入2 -> 价格
+def update_maingraph(catagory_name, price_choice):
+
+    dff = filter(catagory_name, price_choice)
+
+    return {
+        'data': [
+            go.Scatter(
+                x=dff['Reviews'],  # 横轴为评论数
+                y=dff['Installs'],  # 纵轴为安装数
+                text=dff['App'],
+                mode='markers',
+                marker={
+                    'size': 15,
+                    'opacity': 0.5,
+                    'line': {
+                        'width': 0.5,
+                        'color': 'white'
                     }
-                )]
+                })
+        ],
+        'layout':
+        go.Layout(xaxis={
+            'title': 'Reviews',
+        },
+                  yaxis={
+                      'title': 'Installs',
+                  },
+                  margin={
+                      'l': 40,
+                      'b': 30,
+                      't': 10,
+                      'r': 0
+                  },
+                  height=450,
+                  hovermode='closest')
+    }
+
+
+# # size柱形图 callback
+# @app.callback(
+#     dash.dependencies.Output('size-graph', 'figure'),
+#     [dash.dependencies.Input('catagory', 'value'),
+#     dash.dependencies.Input('price', 'value')])
+# def update_sizegraph(catagory_name, price_choice):
+#     dff = filter(catagory_name, price_choice)
+
+
+# content rating饼状图 callback
+@app.callback(dash.dependencies.Output('content-rating-graph', 'figure'), [
+    dash.dependencies.Input('catagory', 'value'),
+    dash.dependencies.Input('price', 'value')
+])
+def update_sizegraph(catagory_name, price_choice):
+
+    dff = filter(catagory_name, price_choice)
+
+    tmp = dff.groupby('Content Rating').size().to_frame()
+    tmp = tmp.rename(columns={0: 'num'})
+    tmp = np.round(tmp, 6).reset_index(drop=False)
+
+
+    return {
+        'data': [
+            dict(
+                type='pie',
+                name='Pie',
+                labels=tmp['Content Rating'].tolist(),
+                values=tmp['num'].tolist(),
+            )
+        ],
+        'layout':
+        go.Layout(
+                  margin={
+                      'l': 130,
+                      'b': 30,
+                      't': 0,
+                      'r': 0
+                  },
+                  height=300,
+                  hovermode='closest')
+    }
+
+
+# 仪表盘 callback
+@app.callback(dash.dependencies.Output('knob-output', 'children'),
+              [dash.dependencies.Input('my-knob', 'value')])
+def update_output(value):
+    return 'The knob value is {}.'.format(value)
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, host='localhost')
