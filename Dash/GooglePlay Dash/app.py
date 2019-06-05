@@ -3,6 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 import numpy as np
+import copy
 import plotly.graph_objs as go
 import dash_daq as daq
 
@@ -11,6 +12,8 @@ from Reader import read_file
 from Reader import file_filter
 from Reader import get_size
 from Reader import get_content_rating
+from Reader import get_price
+
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -23,7 +26,6 @@ tab_style = {
     'padding': '6px',
     'fontWeight': 'bold'
 }
-
 tab_selected_style = {
     'borderTop': '1px solid #d6d6d6',
     'borderBottom': '1px solid #d6d6d6',
@@ -37,7 +39,6 @@ df = pd.read_csv('dataset\google-play-store-apps\googleplaystore.csv')
 available_indicators = df['Category'].unique()
 
 file = read_file()
-
 
 app.layout = html.Div([
     # 仪表盘的callback显示
@@ -222,28 +223,26 @@ def update_maingraph(catagory_name, price_choice):
     dash.dependencies.Input('price', 'value')
 ])
 def update_sizeGraph(catagory_name, price_choice):
-    dff = filter(catagory_name, price_choice)
 
-    newfile = file
-    newfile = file_filter(newfile,catagory_name,price_choice)
+    newfile = read_file()
+    newfile = file_filter(newfile, catagory_name, price_choice)
     [size_catagory, size_list] = get_size(newfile)
-
-    trace = go.Bar(
-        x=size_catagory,
-        y=size_list,
-        text=size_catagory,
-        textposition='auto',
-    )
+    print(size_list)
 
     return {
-        'data': [trace],
+        'data': [{
+            "x": size_catagory,
+            "y": size_list,
+            "type": "bar",
+        }],
         'layout':
-        go.Layout(margin={
-            'l': 40,
-            'b': 50,
-            't': 10,
-            'r': 20
-        },
+        go.Layout(
+                  margin={
+                      'l': 40,
+                      'b': 50,
+                      't': 10,
+                      'r': 20
+                  },
                   legend={
                       'x': 0,
                       'y': 1
@@ -260,18 +259,16 @@ def update_sizeGraph(catagory_name, price_choice):
 ])
 def update_conten_tratingGraph(catagory_name, price_choice):
 
-    dff = filter(catagory_name, price_choice)
+    newfile = read_file()
+    newfile = file_filter(newfile, catagory_name, price_choice)
 
-    newfile = file
-    newfile = file_filter(newfile,catagory_name,price_choice)
+    [content_rating_catagory,
+     content_rating_list] = get_content_rating(newfile)
+    # print(content_rating_catagory,content_rating_list)
 
-    [content_rating_catagory, content_rating_list] = get_content_rating(newfile)
-    # df_types = pd.DataFrame(dff['Content Rating'].value_counts(sort=False))
     trace = go.Pie(
-        # labels=df_types.index,
-        # values=df_types['Content Rating'],
-        labels = content_rating_catagory,
-        values = content_rating_list,
+        labels=content_rating_catagory,
+        values=content_rating_list,
     )
 
     return {
@@ -286,6 +283,42 @@ def update_conten_tratingGraph(catagory_name, price_choice):
                   height=300,
                   hovermode='closest')
     }
+
+
+# price折线图 callback
+@app.callback(dash.dependencies.Output('price-graph', 'figure'), [
+    dash.dependencies.Input('catagory', 'value'),
+    dash.dependencies.Input('price', 'value')
+])
+def update_priceGraph(catagory_name, price_choice):
+
+    newfile = read_file()
+    newfile = file_filter(newfile, catagory_name, price_choice)
+
+    [price_catagory,price_list] = get_price(newfile)
+    
+
+    return {
+        'data': [
+                {
+                    "x": price_catagory,
+                    "y": price_list,
+                    "mode": "markers",
+                    "name": "Male",
+                    "type": "scatter",
+                },
+            ],
+        'layout':
+        go.Layout(margin={
+            'l': 130,
+            'b': 30,
+            't': 50,
+            'r': 0
+        },
+                  height=300,
+                  hovermode='closest')
+    }
+
 
 
 # 仪表盘 callback
