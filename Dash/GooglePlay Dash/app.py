@@ -7,6 +7,10 @@ import plotly.graph_objs as go
 import dash_daq as daq
 
 from dash.dependencies import Input, Output, State
+from Reader import read_file
+from Reader import file_filter
+from Reader import get_size
+from Reader import get_content_rating
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -31,6 +35,9 @@ tab_selected_style = {
 df = pd.read_csv('dataset\google-play-store-apps\googleplaystore.csv')
 
 available_indicators = df['Category'].unique()
+
+file = read_file()
+
 
 app.layout = html.Div([
     # 仪表盘的callback显示
@@ -214,19 +221,17 @@ def update_maingraph(catagory_name, price_choice):
     dash.dependencies.Input('catagory', 'value'),
     dash.dependencies.Input('price', 'value')
 ])
-def update_sizegraph(catagory_name, price_choice):
+def update_sizeGraph(catagory_name, price_choice):
     dff = filter(catagory_name, price_choice)
 
+    newfile = file
+    newfile = file_filter(newfile,catagory_name,price_choice)
+    [size_catagory, size_list] = get_size(newfile)
+
     trace = go.Bar(
-        x=[
-            '0~300K', '300K~600K', '600K~900K', '900K~25M', '25M~50M',
-            '50M~75M', '75M~100M'
-        ],
-        y=[2, 5, 3, 7, 3, 8, 4],
-        text=[
-            '0~300K', '300K~600K', '600K~900K', '900K~25M', '25M~50M',
-            '50M~75M', '75M~100M'
-        ],
+        x=size_catagory,
+        y=size_list,
+        text=size_catagory,
         textposition='auto',
     )
 
@@ -253,14 +258,20 @@ def update_sizegraph(catagory_name, price_choice):
     dash.dependencies.Input('catagory', 'value'),
     dash.dependencies.Input('price', 'value')
 ])
-def update_sizegraph(catagory_name, price_choice):
+def update_conten_tratingGraph(catagory_name, price_choice):
 
     dff = filter(catagory_name, price_choice)
 
-    df_types = pd.DataFrame(dff['Content Rating'].value_counts(sort=False))
+    newfile = file
+    newfile = file_filter(newfile,catagory_name,price_choice)
+
+    [content_rating_catagory, content_rating_list] = get_content_rating(newfile)
+    # df_types = pd.DataFrame(dff['Content Rating'].value_counts(sort=False))
     trace = go.Pie(
-        labels=df_types.index,
-        values=df_types['Content Rating'],
+        # labels=df_types.index,
+        # values=df_types['Content Rating'],
+        labels = content_rating_catagory,
+        values = content_rating_list,
     )
 
     return {
