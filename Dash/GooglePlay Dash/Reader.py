@@ -24,6 +24,37 @@ def file_filter(file, catagory_name, price_choice):
 
     return newfile
 
+def rating_filter(file, rating_value):
+    newfile = []
+    for row in file:
+        if row[2]=='Rating':
+            continue
+        elif row[2]=='NaN':
+            newfile.append(row)
+        else:
+            value = float(row[2])
+            if value < rating_value:
+                newfile.append(row)
+
+    return newfile
+
+
+def get_main(file):
+    Reviews = []
+    Installs = []
+    App = []
+    
+    for row in file:
+        if row[0]!='App':
+            App.append(row[0])
+        
+        if row[3]!='Reviews':
+            Reviews.append(row[3])
+        
+        if row[5]!='Installs':
+            Installs.append(row[5])
+    
+    return[Reviews, Installs, App]
 
 def get_size(file):
     size_catagory = [
@@ -63,17 +94,19 @@ def get_content_rating(file):
     for row in file:
         content_rating_list[content_rating_catagory.index(row[8])] += 1
 
-    for i in range(len(content_rating_catagory)):
-        if content_rating_list[i] > 0:
-            _content_rating_catagory.append(content_rating_catagory[i])
-            _content_rating_list.append(content_rating_list[i])
+    # for i in range(len(content_rating_catagory)):
+    #     if content_rating_list[i] > 0:
+    #         _content_rating_catagory.append(content_rating_catagory[i])
+    #         _content_rating_list.append(content_rating_list[i])
 
-    return [_content_rating_catagory, _content_rating_list]
+    # return [_content_rating_catagory, _content_rating_list]
+    return [content_rating_catagory, content_rating_list]
 
 
 def get_price(file):
-    price_catagory = [i for i in range(0, 400)]
-    price_list = [0] * (len(price_catagory) + 1)
+    price_catagory = ['0','$1~$50','$50~$100','$100~$150','$150~$200',
+    '$200~$250','$250~$300','$300~$350','$350~$400']
+    price_list = [0] * (len(price_catagory))
 
     for row in file:
         if row[7] == 'Price':
@@ -81,7 +114,7 @@ def get_price(file):
         elif row[7] == '0':
             price_list[0] += 1
         else:
-            price = int(float(row[7][1:]))
+            price = int(float(row[7][1:])/50)
             price_list[price] += 1
     
     return [price_catagory,price_list]
@@ -89,6 +122,7 @@ def get_price(file):
 
 if __name__ == '__main__':
     file = read_file()
-    [price_catagory, price_list] = get_price(file)
-    for i in range(len(price_catagory)):
-        print('{} {}'.format(price_catagory[i], price_list[i]))
+    # [price_catagory, price_list] = get_price(file)
+    # for i in range(len(price_catagory)):
+    #     print('{} {}'.format(price_catagory[i], price_list[i]))
+    
