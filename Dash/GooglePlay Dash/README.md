@@ -34,7 +34,8 @@ Make use of dash to visualize one of the three dataset.
 4. Change the **Rating** dial to see the Apps which hold the rating below this rate.
 5. Overview the relation between **Reviews** and **Installs.**
 6. Overview the relation between **Size** of the App and Total **Number** of the Apps in this range of size.
-7. Overview the relation between **Price** of the App and Total **Number** of the Apps which the price is below this price.
+7. Overview the number in different **Content Rating**.
+8. Overview the relation between **Price** of the App and Total **Number** of the Apps which the price is below this price.
 
 
 
@@ -134,7 +135,7 @@ Make use of dash to visualize one of the three dataset.
 
 ![切换付费or免费.gif](https://upload-images.jianshu.io/upload_images/12014150-512bc0ff283d4de3.gif?imageMogr2/auto-orient/strip)
 
-#### Switch from different item in the catalogue
+#### Switch from different item in the category
 
 ![切换分类.gif](https://upload-images.jianshu.io/upload_images/12014150-7c275bc9ceff7d93.gif?imageMogr2/auto-orient/strip)
 
@@ -152,14 +153,14 @@ Make use of dash to visualize one of the three dataset.
 
 #### 		dcc.Dropdown
 
-​	The dropdown is used for the user to choose the item from the catalogue, and then you can see the data of the dataset which the catalogue only belong to the item the user choose.
+​	The dropdown is used for the user to choose the item from the category, and then you can see the data of the dataset which the category only belong to the item the user choose.
 
 ​	Whenever you change your choice, all the graph will change with the callback functions.
 
 ```python
-# catalogue下拉框
+# category下拉框
 dcc.Dropdown(
-    id='catalogue',
+    id='category',
     options=[{
         'label': i,
         'value': i
@@ -285,7 +286,7 @@ style=tabs_styles),
 
      ```python
      'data': [{
-         'x': size_catalogue,     # x轴为软件大小分类
+         'x': size_category,     # x轴为软件大小分类
          'y': size_list,         # y轴为软件大小列表
          'type': 'Scatter',
      }],
@@ -295,7 +296,7 @@ style=tabs_styles),
 
      ```python
       trace = go.Pie(
-         labels=content_rating_catalogue,     # x轴为应用分级分类
+         labels=content_rating_category,     # x轴为应用分级分类
          values=content_rating_list,         # y轴为应用分级列表
      )
      'data': [trace],
@@ -305,7 +306,7 @@ style=tabs_styles),
 
      ```python
      'data': [{
-         "x": price_catalogue,        # x轴为软件价格分类
+         "x": price_category,        # x轴为软件价格分类
          "y": price_list,            # y轴为软件价格列表
          "mode": "lines+markers",
          'type': 'Scatter',
@@ -363,7 +364,7 @@ html.Img(
 @app.callback(
     dash.dependencies.Output('main-graph', 'figure'),   # 输出 -> main点状图
     [
-        dash.dependencies.Input('catalogue', 'value'),   # 输入1 -> 软件分类
+        dash.dependencies.Input('category', 'value'),   # 输入1 -> 软件分类
         dash.dependencies.Input('price', 'value'),      # 输入2 -> 软件是否收费
         dash.dependencies.Input('my-knob', 'value')     # 输入3 -> 评分仪表盘
     ])  # 输入2 -> 价格
@@ -372,7 +373,7 @@ html.Img(
 @app.callback(
     dash.dependencies.Output('size-graph', 'figure'),   # 输出 -> size折线图
     [
-        dash.dependencies.Input('catalogue', 'value'),   # 输入1 -> 软件分类
+        dash.dependencies.Input('category', 'value'),   # 输入1 -> 软件分类
         dash.dependencies.Input('price', 'value')       # 输入2 -> 软件是否收费
     ])
 
@@ -380,7 +381,7 @@ html.Img(
 @app.callback(
     dash.dependencies.Output('content-rating-graph', 'figure'),     # 输出 -> content rating饼状图
     [
-        dash.dependencies.Input('catalogue', 'value'),               # 输入1 -> 软件分类
+        dash.dependencies.Input('category', 'value'),               # 输入1 -> 软件分类
         dash.dependencies.Input('price', 'value')                   # 输入2 -> 软件是否收费
     ])
 
@@ -388,7 +389,7 @@ html.Img(
 @app.callback(
     dash.dependencies.Output('price-graph', 'figure'),  # 输出 -> price折线图
     [
-        dash.dependencies.Input('catalogue', 'value'),   # 输入1 -> 软件分类
+        dash.dependencies.Input('category', 'value'),   # 输入1 -> 软件分类
         dash.dependencies.Input('price', 'value'),      # 输入2 -> 软件是否收费
         dash.dependencies.Input('my-knob', 'value')     # 输入3 -> 评分仪表盘
     ])
@@ -429,10 +430,10 @@ available_indicators = df['Category'].unique()
 
 ```python
 # 按照分类名和是否付费进行筛选
-def file_filter(file, catalogue_name, price_choice):
+def file_filter(file, category_name, price_choice):
     newfile = []
     for row in file:
-        if row[1] == catalogue_name:
+        if row[1] == category_name:
             if price_choice == 'All':
                 newfile.append(row)
             elif price_choice == 'Free' and row[7] == '0':
@@ -470,29 +471,29 @@ def get_main(file):
     
 # 获取size折线图所需数据
 def get_size(file):
-    size_catalogue = [
+    size_category = [
         '0~300K', '300K~600K', '600K~900K', '900K~25M', '25M~50M',
         '50M~75M','75M~100M', 'Varies with device'
     ]
-    size_list = [0] * len(size_catalogue)
+    size_list = [0] * len(size_category)
     ...
     
 # 获取content rating饼状图所需数据
 def get_content_rating(file):
-    content_rating_catalogue = [
+    content_rating_category = [
         'Everyone', 'Teen', 'Everyone 10+', 
         'Mature 17+', 'Adults only 18+','Unrated'
     ]
-    content_rating_list = [0] * len(content_rating_catalogue)
+    content_rating_list = [0] * len(content_rating_category)
     ...
   
 # 获取price折线图所需数据
 def get_price(file):
-    price_catalogue = [
+    price_category = [
         '0','$1~$50','$50~$100','$100~$150','$150~$200',
         '$200~$250','$250~$300','$300~$350','$350~$400'
     ]
-    price_list = [0] * (len(price_catalogue))
+    price_list = [0] * (len(price_category))
     ...
 ```
 
