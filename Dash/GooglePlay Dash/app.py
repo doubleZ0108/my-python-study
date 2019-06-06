@@ -41,8 +41,8 @@ file = read_file()
 app.layout = html.Div([
     html.Div([
             html.Div([
-                    # Catagory下拉框
-                    dcc.Dropdown(id='catagory',
+                    # category下拉框
+                    dcc.Dropdown(id='category',
                                  options=[{
                                      'label': i,
                                      'value': i
@@ -167,15 +167,15 @@ app.layout = html.Div([
 @app.callback(
     dash.dependencies.Output('main-graph', 'figure'),   # 输出 -> main点状图
     [
-        dash.dependencies.Input('catagory', 'value'),   # 输入1 -> 软件分类
+        dash.dependencies.Input('category', 'value'),   # 输入1 -> 软件分类
         dash.dependencies.Input('price', 'value'),      # 输入2 -> 软件是否收费
         dash.dependencies.Input('my-knob', 'value')     # 输入3 -> 评分仪表盘
     ])  # 输入2 -> 价格
-def update_maingraph(catagory_name, price_choice, rating_value):
+def update_maingraph(category_name, price_choice, rating_value):
 
     # 获取评论数, 下载量, 软件名称
     newfile = read_file()
-    newfile = file_filter(newfile, catagory_name, price_choice)
+    newfile = file_filter(newfile, category_name, price_choice)
     newfile = rating_filter(newfile, rating_value)
 
     [Reviews, Installs, App] = get_main(newfile)
@@ -219,21 +219,21 @@ def update_maingraph(catagory_name, price_choice, rating_value):
 @app.callback(
     dash.dependencies.Output('size-graph', 'figure'),   # 输出 -> size折线图
     [
-        dash.dependencies.Input('catagory', 'value'),   # 输入1 -> 软件分类
+        dash.dependencies.Input('category', 'value'),   # 输入1 -> 软件分类
         dash.dependencies.Input('price', 'value')       # 输入2 -> 软件是否收费
     ])
-def update_sizeGraph(catagory_name, price_choice):
+def update_sizeGraph(category_name, price_choice):
 
     # 获取软件大小分类, 软件大小列表
     newfile = read_file()
-    newfile = file_filter(newfile, catagory_name, price_choice)
+    newfile = file_filter(newfile, category_name, price_choice)
 
-    [size_catagory, size_list] = get_size(newfile)
-    # print(size_catagory, size_list)
+    [size_category, size_list] = get_size(newfile)
+    # print(size_category, size_list)
 
     return {
         'data': [{
-            'x': size_catagory,     # x轴为软件大小分类
+            'x': size_category,     # x轴为软件大小分类
             'y': size_list,         # y轴为软件大小列表
             'type': 'Scatter',
             }],
@@ -258,21 +258,21 @@ def update_sizeGraph(catagory_name, price_choice):
 @app.callback(
     dash.dependencies.Output('content-rating-graph', 'figure'),     # 输出 -> content rating饼状图
     [
-        dash.dependencies.Input('catagory', 'value'),               # 输入1 -> 软件分类
+        dash.dependencies.Input('category', 'value'),               # 输入1 -> 软件分类
         dash.dependencies.Input('price', 'value')                   # 输入2 -> 软件是否收费
     ])
-def update_conten_tratingGraph(catagory_name, price_choice):
+def update_conten_tratingGraph(category_name, price_choice):
 
     # 获取应用分级分类, 应用分级列表
     newfile = read_file()
-    newfile = file_filter(newfile, catagory_name, price_choice)
+    newfile = file_filter(newfile, category_name, price_choice)
 
-    [content_rating_catagory, content_rating_list] = get_content_rating(newfile)
-    # print(content_rating_catagory,content_rating_list)
+    [content_rating_category, content_rating_list] = get_content_rating(newfile)
+    print(content_rating_category,content_rating_list)
 
 
     trace = go.Pie(
-        labels=content_rating_catagory,     # x轴为应用分级分类
+        labels=content_rating_category,     # x轴为应用分级分类
         values=content_rating_list,         # y轴为应用分级列表
         )
     return {
@@ -294,22 +294,22 @@ def update_conten_tratingGraph(catagory_name, price_choice):
 @app.callback(
     dash.dependencies.Output('price-graph', 'figure'),  # 输出 -> price折线图
     [
-        dash.dependencies.Input('catagory', 'value'),   # 输入1 -> 软件分类
+        dash.dependencies.Input('category', 'value'),   # 输入1 -> 软件分类
         dash.dependencies.Input('price', 'value'),      # 输入2 -> 软件是否收费
         dash.dependencies.Input('my-knob', 'value')     # 输入3 -> 评分仪表盘
     ])
-def update_priceGraph(catagory_name, price_choice, rating_value):
+def update_priceGraph(category_name, price_choice, rating_value):
 
     # 获取软件价格分类, 软件价格列表
     newfile = read_file()
-    newfile = file_filter(newfile, catagory_name, price_choice)
+    newfile = file_filter(newfile, category_name, price_choice)
     newfile = rating_filter(newfile, rating_value)
 
-    [price_catagory, price_list] = get_price(newfile)
+    [price_category, price_list] = get_price(newfile)
 
     return {
         'data': [{
-            "x": price_catagory,        # x轴为软件价格分类
+            "x": price_category,        # x轴为软件价格分类
             "y": price_list,            # y轴为软件价格列表
             "mode": "lines+markers",
             'type': 'Scatter',
