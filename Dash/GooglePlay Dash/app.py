@@ -8,12 +8,14 @@ import plotly.graph_objs as go
 import dash_daq as daq
 
 from dash.dependencies import Input, Output, State
-from Reader import read_file
-from Reader import file_filter
-from Reader import get_size
-from Reader import get_content_rating
-from Reader import get_price
-
+from Reader import *
+# from Reader import read_file
+# from Reader import file_filter
+# from Reader import rating_filter
+# from Reader import get_main
+# from Reader import get_size
+# from Reader import get_content_rating
+# from Reader import get_price
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -41,8 +43,6 @@ available_indicators = df['Category'].unique()
 file = read_file()
 
 app.layout = html.Div([
-    # 仪表盘的callback显示
-    html.Div(id='knob-output'),
     html.Div(
         [
             html.Div(
@@ -69,78 +69,71 @@ app.layout = html.Div([
                 }),
 
             # tab -> 可以切换两个视图
-            html.Div([
-                dcc.Tabs(
-                    id="tabs",
-                    children=[
-                        dcc.Tab(
-                            label='Size & Content Rating',
-                            style=tab_style,
-                            selected_style=tab_selected_style,
-                            children=[
-                                html.Div(
-                                    [
-                                        dcc.Graph(id='size-graph',
-                                                  animate=True),
-                                        dcc.Graph(id='content-rating-graph',
-                                                  animate=True)
-                                    ],
-                                    style={
-                                        'display': 'inline-block',
-                                        'width': '97%',
-                                        'height': '20%',
-                                        'padding': '0 0 0 0'
-                                    })
-                            ]),
-                        dcc.Tab(
-                            label='Price & Rating',
-                            style=tab_style,
-                            selected_style=tab_selected_style,
-                            children=[
-                                html.Div(
-                                    [
-                                        dcc.Graph(
-                                            id='price-graph',
-                                            figure={
-                                                'layout':
-                                                go.Layout(margin={
-                                                    'l': 40,
-                                                    'b': 40,
-                                                    't': 10,
-                                                    'r': 10
-                                                },
-                                                          legend={
-                                                              'x': 0,
-                                                              'y': 1
-                                                          },
-                                                          height=280,
-                                                          hovermode='closest')
-                                            }),
-                                        daq.Knob(id='my-knob',
-                                                 label="Rating",
-                                                 value=5,
-                                                 max=5,
-                                                 scale={
-                                                     'start': 0,
-                                                     'labelInterval': 1,
-                                                     'interval': 1
-                                                 })
-                                    ],
-                                    style={
-                                        'display': 'inline-block',
-                                        'width': '90%',
-                                        'height': '20%',
-                                        'padding': '0 0 0 0'
-                                    })
-                            ]),
-                    ],
-                    style=tabs_styles),
-            ],
-                     style={
-                         'width': '49%',
-                         'float': 'right',
-                         'display': 'inline-block'
-                     })
+            html.Div(
+                [
+                    dcc.Tabs(
+                        id="tabs",
+                        children=[
+                            dcc.Tab(label='Size & Content Rating',
+                                    style=tab_style,
+                                    selected_style=tab_selected_style,
+                                    children=[
+                                        html.Div(
+                                            [
+                                                dcc.Graph(id='size-graph',
+                                                          animate=True),
+                                                dcc.Graph(
+                                                    id='content-rating-graph',
+                                                    animate=True)
+                                            ],
+                                            style={
+                                                'display': 'inline-block',
+                                                'width': '97%',
+                                                'height': '20%',
+                                                'padding': '0 0 0 0'
+                                            })
+                                    ]),
+                            dcc.Tab(
+                                label='Price & Rating',
+                                style=tab_style,
+                                selected_style=tab_selected_style,
+                                children=[
+                                    html.Div(
+                                        [
+                                            dcc.Graph(id='price-graph',
+                                                      animate=True),
+                                            daq.Knob(id='my-knob',
+                                                     label="Rating",
+                                                     labelPosition='bottom',
+                                                     value=5,
+                                                     max=5,
+                                                     scale={
+                                                         'start': 0,
+                                                         'labelInterval': 1,
+                                                         'interval': 1
+                                                     }),
+                                            # 仪表盘的callback显示
+                                            html.Div(id='knob-output',
+                                            style={
+                                                'marginTop': -80,
+                                                'marginLeft': 425
+                                            }),                                        
+                                        ],
+                                        style={
+                                            'display': 'inline-block',
+                                            'width': '90%',
+                                            'height': '20%',
+                                            'padding': '0 0 0 0'
+                                        })
+                                ]),
+                        ],
+                        style=tabs_styles),
+                ],
+                style={
+                    'width': '49%',
+                    'float': 'right',
+                    'display': 'inline-block'
+                })
         ],
         style={
             'borderBottom': 'thin lightgrey solid',
@@ -177,18 +170,26 @@ def filter(catagory_name, price_choice):
     dash.dependencies.Output('main-graph', 'figure'),
     [
         dash.dependencies.Input('catagory', 'value'),  # 输入1 -> 软件分类
-        dash.dependencies.Input('price', 'value')
+        dash.dependencies.Input('price', 'value'),
+        dash.dependencies.Input('my-knob', 'value')
     ])  # 输入2 -> 价格
-def update_maingraph(catagory_name, price_choice):
+def update_maingraph(catagory_name, price_choice, rating_value):
 
     dff = filter(catagory_name, price_choice)
+
+    newfile = read_file()
+    newfile = file_filter(newfile, catagory_name, price_choice)
+    newfile = rating_filter(newfile, rating_value)
+
+    [Reviews, Installs, App] = get_main(newfile)
+    # print(size_catagory, size_list)
 
     return {
         'data': [
             go.Scatter(
-                x=dff['Reviews'],  # 横轴为评论数
-                y=dff['Installs'],  # 纵轴为安装数
-                text=dff['App'],
+                x=Reviews,  # 横轴为评论数
+                y=Installs,  # 纵轴为安装数
+                text=App,
                 mode='markers',
                 marker={
                     'size': 15,
@@ -217,7 +218,7 @@ def update_maingraph(catagory_name, price_choice):
     }
 
 
-# size柱形图 callback
+# size折线图 callback
 @app.callback(dash.dependencies.Output('size-graph', 'figure'), [
     dash.dependencies.Input('catagory', 'value'),
     dash.dependencies.Input('price', 'value')
@@ -227,22 +228,21 @@ def update_sizeGraph(catagory_name, price_choice):
     newfile = read_file()
     newfile = file_filter(newfile, catagory_name, price_choice)
     [size_catagory, size_list] = get_size(newfile)
-    print(size_list)
+    # print(size_catagory, size_list)
 
     return {
         'data': [{
-            "x": size_catagory,
-            "y": size_list,
-            "type": "bar",
+            'x': size_catagory,
+            'y': size_list,
+            'type': 'Scatter',
         }],
         'layout':
-        go.Layout(
-                  margin={
-                      'l': 40,
-                      'b': 50,
-                      't': 10,
-                      'r': 20
-                  },
+        go.Layout(margin={
+            'l': 40,
+            'b': 50,
+            't': 20,
+            'r': 20
+        },
                   legend={
                       'x': 0,
                       'y': 1
@@ -288,44 +288,44 @@ def update_conten_tratingGraph(catagory_name, price_choice):
 # price折线图 callback
 @app.callback(dash.dependencies.Output('price-graph', 'figure'), [
     dash.dependencies.Input('catagory', 'value'),
-    dash.dependencies.Input('price', 'value')
+    dash.dependencies.Input('price', 'value'),
+    dash.dependencies.Input('my-knob', 'value')
 ])
-def update_priceGraph(catagory_name, price_choice):
+def update_priceGraph(catagory_name, price_choice, rating_value):
 
     newfile = read_file()
     newfile = file_filter(newfile, catagory_name, price_choice)
+    newfile = rating_filter(newfile, rating_value)
 
-    [price_catagory,price_list] = get_price(newfile)
-    
+    [price_catagory, price_list] = get_price(newfile)
 
     return {
         'data': [
-                {
-                    "x": price_catagory,
-                    "y": price_list,
-                    "mode": "markers",
-                    "name": "Male",
-                    "type": "scatter",
-                },
-            ],
+            {
+                "x": price_catagory,
+                "y": price_list,
+                "mode": "lines+markers",
+                'type': 'Scatter',
+                'name': 'Line'
+            },
+        ],
         'layout':
         go.Layout(margin={
             'l': 130,
-            'b': 30,
+            'b': 50,
             't': 50,
-            'r': 0
+            'r': 40
         },
                   height=300,
                   hovermode='closest')
     }
 
 
-
 # 仪表盘 callback
 @app.callback(dash.dependencies.Output('knob-output', 'children'),
               [dash.dependencies.Input('my-knob', 'value')])
 def update_output(value):
-    return 'The knob value is {}.'.format(value)
+    return '<= {}.'.format(value)
 
 
 if __name__ == '__main__':
