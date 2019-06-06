@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.graph_objs as go
 import csv
 
-
+# 读取csv文件
 def read_file():
     file = csv.reader(
         open('dataset\google-play-store-apps\googleplaystore.csv',
@@ -10,7 +10,7 @@ def read_file():
 
     return file
 
-
+# 按照分类名和是否付费进行筛选
 def file_filter(file, catagory_name, price_choice):
     newfile = []
     for row in file:
@@ -24,6 +24,7 @@ def file_filter(file, catagory_name, price_choice):
 
     return newfile
 
+# 按照评分进行删选
 def rating_filter(file, rating_value):
     newfile = []
     for row in file:
@@ -39,11 +40,12 @@ def rating_filter(file, rating_value):
     return newfile
 
 
+# 获取main散点图所需数据
 def get_main(file):
-    Reviews = []
-    Installs = []
-    App = []
-    
+    Reviews = []        # 评论数
+    Installs = []       # 下载数
+    App = []            # App的名称
+
     for row in file:
         if row[0]!='App':
             App.append(row[0])
@@ -55,14 +57,15 @@ def get_main(file):
             Installs.append(row[5])
     
     return[Reviews, Installs, App]
-
+# 获取size折线图所需数据
 def get_size(file):
     size_catagory = [
-        '0~300K', '300K~600K', '600K~900K', '900K~25M', '25M~50M', '50M~75M',
-        '75M~100M', 'Varies with device'
+        '0~300K', '300K~600K', '600K~900K', '900K~25M', '25M~50M',
+        '50M~75M','75M~100M', 'Varies with device'
     ]
     size_list = [0] * len(size_catagory)
     variesNum = 0
+
     for row in file:
         if row[4][-1] == 'M':
             num = float(row[4][0:-1])
@@ -79,33 +82,24 @@ def get_size(file):
             continue  # 去掉第一行的Size
 
     return [size_catagory, size_list]
-
-
+# 获取content rating饼状图所需数据
 def get_content_rating(file):
     content_rating_catagory = [
-        'Everyone', 'Teen', 'Everyone 10+', 'Mature 17+', 'Adults only 18+',
-        'Unrated'
+        'Everyone', 'Teen', 'Everyone 10+', 
+        'Mature 17+', 'Adults only 18+','Unrated'
     ]
     content_rating_list = [0] * len(content_rating_catagory)
-
-    _content_rating_catagory = []
-    _content_rating_list = []
 
     for row in file:
         content_rating_list[content_rating_catagory.index(row[8])] += 1
 
-    # for i in range(len(content_rating_catagory)):
-    #     if content_rating_list[i] > 0:
-    #         _content_rating_catagory.append(content_rating_catagory[i])
-    #         _content_rating_list.append(content_rating_list[i])
-
-    # return [_content_rating_catagory, _content_rating_list]
     return [content_rating_catagory, content_rating_list]
-
-
+# 获取price折线图所需数据
 def get_price(file):
-    price_catagory = ['0','$1~$50','$50~$100','$100~$150','$150~$200',
-    '$200~$250','$250~$300','$300~$350','$350~$400']
+    price_catagory = [
+        '0','$1~$50','$50~$100','$100~$150','$150~$200',
+        '$200~$250','$250~$300','$300~$350','$350~$400'
+    ]
     price_list = [0] * (len(price_catagory))
 
     for row in file:
@@ -121,8 +115,3 @@ def get_price(file):
 
 
 if __name__ == '__main__':
-    file = read_file()
-    # [price_catagory, price_list] = get_price(file)
-    # for i in range(len(price_catagory)):
-    #     print('{} {}'.format(price_catagory[i], price_list[i]))
-    
