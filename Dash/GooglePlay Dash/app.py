@@ -117,7 +117,17 @@ app.layout = html.Div([
                                             style={
                                                 'marginTop': -80,
                                                 'marginLeft': 425
-                                            }),                                        
+                                            }),
+                                            html.Img(id='star-img',
+                                            src='https://upload-images.jianshu.io/upload_images/12014150-c2ee9fe0591b3247.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240',
+                                            height='50px',
+                                            width='50px',
+                                            style={
+                                                'marginTop': -120,
+                                                'marginLeft': 375
+                                            }
+                                            )
+                                        
                                         ],
                                         style={
                                             'display': 'inline-block',
