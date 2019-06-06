@@ -11,10 +11,10 @@ def read_file():
     return file
 
 # 按照分类名和是否付费进行筛选
-def file_filter(file, catagory_name, price_choice):
+def file_filter(file, category_name, price_choice):
     newfile = []
     for row in file:
-        if row[1] == catagory_name:
+        if row[1] == category_name:
             if price_choice == 'All':
                 newfile.append(row)
             elif price_choice == 'Free' and row[7] == '0':
@@ -59,11 +59,11 @@ def get_main(file):
     return[Reviews, Installs, App]
 # 获取size折线图所需数据
 def get_size(file):
-    size_catagory = [
+    size_category = [
         '0~300K', '300K~600K', '600K~900K', '900K~25M', '25M~50M',
         '50M~75M','75M~100M', 'Varies with device'
     ]
-    size_list = [0] * len(size_catagory)
+    size_list = [0] * len(size_category)
     variesNum = 0
 
     for row in file:
@@ -81,26 +81,26 @@ def get_size(file):
         else:
             continue  # 去掉第一行的Size
 
-    return [size_catagory, size_list]
+    return [size_category, size_list]
 # 获取content rating饼状图所需数据
 def get_content_rating(file):
-    content_rating_catagory = [
+    content_rating_category = [
         'Everyone', 'Teen', 'Everyone 10+', 
         'Mature 17+', 'Adults only 18+','Unrated'
     ]
-    content_rating_list = [0] * len(content_rating_catagory)
+    content_rating_list = [0] * len(content_rating_category)
 
     for row in file:
-        content_rating_list[content_rating_catagory.index(row[8])] += 1
+        content_rating_list[content_rating_category.index(row[8])] += 1
 
-    return [content_rating_catagory, content_rating_list]
+    return [content_rating_category, content_rating_list]
 # 获取price折线图所需数据
 def get_price(file):
-    price_catagory = [
+    price_category = [
         '0','$1~$50','$50~$100','$100~$150','$150~$200',
         '$200~$250','$250~$300','$300~$350','$350~$400'
     ]
-    price_list = [0] * (len(price_catagory))
+    price_list = [0] * (len(price_category))
 
     for row in file:
         if row[7] == 'Price':
@@ -111,7 +111,20 @@ def get_price(file):
             price = int(float(row[7][1:])/50)
             price_list[price] += 1
     
-    return [price_catagory,price_list]
+    return [price_category,price_list]
 
 
 if __name__ == '__main__':
+    file = read_file()
+    [Reviews, Installs, App] = get_main(file)
+    [size_category,size_list] = get_size(file)
+    [content_rating_category, content_rating_list] = get_content_rating(file)
+    [price_category, price_list] = get_price(file)
+
+
+    for i in range(len(size_category)):
+        print('Size: {} {}'.format(size_category[i],size_list[i]))
+    for i in range(len(content_rating_category)):
+        print('Content Rating: {} {}'.format(content_rating_category[i],content_rating_list[i]))
+    for i in range(len(price_category)):
+        print('Price: {} {}'.format(price_category[i], price_list[i]))
