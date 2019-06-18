@@ -22,7 +22,22 @@ def data_entry():
     conn.close()
     # endregion
 
+def more_data():
+    for i in range(10):
+        current_time = time.time()
+        date = str(datetime.datetime.fromtimestamp(current_time).strftime('%Y-%m-%d'))
+        name = 'double Z'
+        course = 'Python' + str(i)
+        cursor.execute("INSERT INTO user (id, name, course, datastamp) VALUES (?, ?, ?, ?)",(i,name,course,date))
+        conn.commit()
+    cursor.close()
+    conn.close()
 
+def read_from_db():
+    cursor.execute("SELECT * FROM user")
+    data = cursor.fetchall()
+    for item in data:
+        print(item)
 
 if __name__=='__main__':
     create_table()
