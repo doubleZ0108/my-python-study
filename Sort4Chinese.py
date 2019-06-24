@@ -17,18 +17,26 @@ init = faker.Faker(locale='zh-cn')
 pinyin = Pinyin()
 
 if __name__=='__main__':
-    words = [
-"正风肃纪	264",
-"作风建设	264",
-"政治纪律	265",
-"破窗效应	265",
-"制度建设	265",
-"标本兼治	265",
-"廉政建设	265",
-"腐败	265"]
-    words = Sort4Chinese(words)
 
-    print(words)
+    # 读取原文件
+    infile = open('nonSortFile.txt','r')
+    words = []
+    try: 
+        for line in infile:
+            words.append(line)
+    finally:
+        infile.close()
 
+    # 去除原文件的空行
+    new_words = filter(lambda str: str!='\n', words)
 
+    # 按中文首字母排序
+    new_words = Sort4Chinese(words)
 
+    # 写入目标文件
+    outfile = open('Sorted.txt','w')
+    try:
+        for line in new_words:
+            outfile.write(line)
+    finally:
+        outfile.close()
