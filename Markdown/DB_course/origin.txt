@@ -176,7 +176,7 @@ FROM instructor
 WHERE salary>some(
     SELECT salary
     FROM instructor
-    WHERE dept_name='Biology';
+    WHERE dept_name='Biology'
 );
 
 --2.找出工资比所有Biology系老师都高
@@ -339,3 +339,29 @@ SET tot_cred = (
     FROM takes NATURE JOIN course
     WHERE S.ID=takes.ID and takes.grade is not null and takes.grade<>'F'
 );
+
+
+--[视图 -> view]--
+--1.创建系总工资视图
+CREATE dept_total_salary(dept_name, total_salary) AS
+(
+    SELECT dept_name, sum(salary)
+    FROM instructor
+    GROUP BY dept_name
+);
+
+--[函数]--
+--1.定义一个函数, 输入一个系名, 输出该系有多少老师
+CREATE FUNCTION dept_count(dept_name VARCHAR(20))
+RETURNS INTEGER
+BEGIN
+    DECLARE d_count INTEGER; 
+    SELECT count(*) INTO d_count
+    FROM instructor
+    WHERE instructor.dept_name = dept_name
+    return d_count; 
+END;
+--使用该函数找到所有老师数大于12的系名和预算
+SELECT dept_name, budget
+FROM department
+WHERE dept_count(dept_name)>12;
