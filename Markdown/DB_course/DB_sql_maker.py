@@ -69,12 +69,14 @@ if __name__=='__main__':
         'from子句中的子查询',
         '删除',
         '插入',
-        '更新'
+        '更新',
+        '视图 -> view',
+        '函数'
     ]
     file = ReadFile('origin.txt')
 
     new_file = Markdown_Maker(file, main_topic)
-    new_file.insert(0,'# 数据库SQL语句练习')
+    new_file.insert(0,'# 数据库SQL语句练习\n')
     new_file.insert(1,'[TOC]\n')
 
     WriteFile('DB.md',new_file)
