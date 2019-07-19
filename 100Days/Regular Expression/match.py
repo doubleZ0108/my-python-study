@@ -14,7 +14,7 @@
 import re
 
 def usernameCheck(username):
-    m = re.match(r'^[0-9a-zA-Z_]{6,20}$', username)
+    m = re.match(r'^[0-9a-zA-Z_]{6,20}$', username) # 字符串前加 r 构成"原始字符串", 不考虑转义字符
     if not m:
         print('请输入正确的用户名')
         return False
