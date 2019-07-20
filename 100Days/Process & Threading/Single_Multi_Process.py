@@ -4,8 +4,8 @@ from multiprocessing import Process
 from os import getpid
 
 
-def download_task(filename, multi_threading = False):
-    if multi_threading:
+def download_task(filename, multi_process = False):
+    if multi_process:
         print('启动下载进程, 进程号[%d]' % getpid())
     print('开始下载%s...' % filename)
     time_to_download = randint(5,10)
@@ -13,7 +13,7 @@ def download_task(filename, multi_threading = False):
     print('%s下载完成, 耗时%ds' % (filename, time_to_download))
 
 
-def Single_Threading():
+def Single_Process():
     start = time()
     download_task('Python程序设计')
     download_task('离散数学')
@@ -28,7 +28,7 @@ args --> 一个元组, 代表传递给函数的参数
 start() --> 启动进程
 join() --> 等待进程执行结束
 '''
-def Multi_Threading():
+def Multi_Process():
     start = time()
     p1 = Process(target = download_task, args=('Python程序设计', True))
     p1.start()
@@ -42,5 +42,5 @@ def Multi_Threading():
 
 
 if __name__ == "__main__":
-    Single_Threading()
-    Multi_Threading()
+    Single_Process()
+    Multi_Process()
