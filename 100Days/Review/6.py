@@ -1,9 +1,10 @@
 from multiprocessing import Process,Lock
 from time import time, sleep
+from os import getpid
 from random import randint
 
 def Download_Task(filename):
-    print('%s下载开始...' % filename)
+    print('%s下载开始...进程号[%d]' % (filename,getpid()))
     time_to_download = randint(1,10)
     sleep(time_to_download)
     print('%s下载完成, 耗时%d' % (filename, time_to_download))
