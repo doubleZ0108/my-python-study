@@ -51,3 +51,8 @@ print(list5)
 ## 字典生成语法
 upper_grade_dict = {key:value for key,value in grade_dict.items() if value>60}
 print(upper_grade_dict)
+
+## 集合生成语法
+set1 = {1,1,2,2,2,3,4,5,5,6}
+set1 = {x for x in set1 if x%2}
+print(set1)
