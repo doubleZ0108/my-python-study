@@ -27,3 +27,13 @@ f = [x for x in range(1,11)]
 print(f)
 f = [x+y for x in 'ABCDE' for y in '1234567']
 print(f)
+
+
+## 嵌套列表
+names = ['zz','yt','sm','gf','gp']
+courses = ['语文','数学','英语']
+scores = [[None]*len(courses) for _ in range(len(names))]
+for row,name in enumerate(names):
+    for col,course in enumerate(courses):
+        scores[row][col] = float(input(f'请输入{name}的{course}成绩: '))
+        print(scores)
