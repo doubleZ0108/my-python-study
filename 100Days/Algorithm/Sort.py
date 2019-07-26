@@ -67,31 +67,31 @@ def merge(arr1, arr2, cmp):
     return merged_arr
 
 # 快速排序
-def QuickSort(arr):
-    arr = quick_sort(arr,0,len(arr)-1)
+def QuickSort(arr, cmp=lambda x,y:x<y):     # 这里不能用<=，还没de出为啥
+    arr = quick_sort(arr,0,len(arr)-1,cmp)
     return arr
 
-def quick_sort(arr, low, high):
+def quick_sort(arr, low, high, cmp=lambda x,y:x<y):
     if low>= high:
         return arr
 
     i,j = low, high
     key = arr[low]
     while low < high:
-        while low<high and arr[high]>=key:
+        while low<high and cmp(key,arr[high]):
             high -= 1
-        if arr[high]<key:
+        if cmp(arr[high],key):
             arr[low],arr[high] = arr[high],arr[low]
             low += 1
-        while low<high and arr[low]<=key:
+        while low<high and cmp(arr[low],key):
             low += 1
-        if arr[low]>key:
+        if cmp(key,arr[low]):
             arr[low],arr[high] = arr[high],arr[low]
             high -= 1
     arr[low] = key
 
-    quick_sort(arr,i,low-1)
-    quick_sort(arr,low+1,j)
+    quick_sort(arr,i,low-1,cmp)
+    quick_sort(arr,low+1,j,cmp)
     return arr
 
 
