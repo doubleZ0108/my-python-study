@@ -37,6 +37,13 @@ list4 = [(x,y) for x in l1 for y in l2]
 print(list4)
 
 
+## map和filter 与 列表生成器 替换
+item1 = list(map(lambda x:x**2,filter(lambda x:x%2,range(1,10))))
+item2 = [x**2 for x in range(1,10) if x%2]
+
+
+
+
 grade_dict = {
     'zz':100,
     'yT':99,
